@@ -10,7 +10,6 @@
 const { t } = useI18n()
 
 const { state: { name, version } } = useAppStore()
-
 useSeoMeta({
   title: t('home.title')
 })
