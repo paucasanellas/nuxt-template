@@ -1,4 +1,7 @@
 export default defineNuxtConfig({
+  modules: [
+    '@nuxtjs/i18n',
+  ],
   components: [
     { path: '@/components', pathPrefix: false },
   ],
@@ -12,5 +15,13 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   telemetry: {
     enabled: false,
+  },
+  i18n: {
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', language: 'en-EN', file: 'en.json' },
+    ],
+    langDir: 'locales',
+    restructureDir: './app',
   },
 })
