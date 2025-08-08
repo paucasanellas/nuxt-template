@@ -10,9 +10,10 @@ export default defineConfig({
     projects: [
       {
         test: {
-          name: 'unit',
+          name: 'server',
           globals: true,
-          include: ['tests/{unit}/*.{test,spec}.ts'],
+          setupFiles: ['./vitest.server.ts'],
+          include: ['server/api/**/*.{test,spec}.ts'],
           environment: 'node',
         },
       },
@@ -20,8 +21,10 @@ export default defineConfig({
         test: {
           name: 'nuxt',
           globals: true,
-          setupFiles: ['./vitest.setup.ts'],
-          include: ['app/**/*.{test,spec}.ts'],
+          setupFiles: ['./vitest.nuxt.ts'],
+          include: [
+            'app/**/*.{test,spec}.ts',
+          ],
           environment: 'nuxt',
           environmentOptions: {
             nuxt: {
