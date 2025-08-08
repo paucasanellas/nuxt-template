@@ -1,6 +1,7 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
+    '@pinia/nuxt',
   ],
   components: [
     { path: '@/components', pathPrefix: false },
@@ -23,5 +24,8 @@ export default defineNuxtConfig({
     ],
     langDir: 'locales',
     restructureDir: './app',
+  },
+  pinia: {
+    storesDirs: ['./app/stores/**.store.ts'],
   },
 })
