@@ -2,6 +2,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
     '@pinia/nuxt',
+    '@nuxt/ui',
   ],
   components: [
     { path: '@/components', pathPrefix: false },
@@ -13,6 +14,9 @@ export default defineNuxtConfig({
     },
   },
   css: ['@/assets/css/main.css'],
+  colorMode: {
+    preference: 'light',
+  },
   compatibilityDate: '2025-07-15',
   telemetry: {
     enabled: false,
