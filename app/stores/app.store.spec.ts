@@ -1,12 +1,10 @@
-describe('AppStore', () => {
-  it('should exists as store', () => {
+describe('Store: AppStore', () => {
+  it('should return an app state', () => {
     const store = useAppStore()
-    expect(store).toBeDefined()
-  })
 
-  it('should have basic state', () => {
-    const expectedState = {}
-    const store = useAppStore()
-    expect(store.state).toStrictEqual(expectedState)
+    expect(store.state).toStrictEqual({
+      name: 'Nuxt Template',
+      version: '1.0.0',
+    })
   })
 })
