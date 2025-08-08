@@ -12,7 +12,7 @@ export default defineConfig({
         test: {
           name: 'server',
           globals: true,
-          setupFiles: ['./vitest.server.ts'],
+          setupFiles: ['./tests/vitest.server.ts'],
           include: ['server/api/**/*.{test,spec}.ts'],
           environment: 'node',
         },
@@ -21,7 +21,7 @@ export default defineConfig({
         test: {
           name: 'nuxt',
           globals: true,
-          setupFiles: ['./vitest.nuxt.ts'],
+          setupFiles: ['./tests/vitest.nuxt.ts'],
           include: [
             'app/**/*.{test,spec}.ts',
           ],
