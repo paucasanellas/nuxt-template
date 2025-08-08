@@ -1,7 +1,9 @@
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/test-utils',
-  ],
-  devtools: { enabled: true },
+  devtools: {
+    enabled: import.meta.env.DEVTOOLS_ENABLED || false,
+    timeline: {
+      enabled: true,
+    },
+  },
   compatibilityDate: '2025-07-15',
 })
