@@ -3,6 +3,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@nuxt/ui',
+    '@compodium/nuxt',
   ],
   components: [
     { path: '@/components', pathPrefix: false },
@@ -20,6 +21,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   telemetry: {
     enabled: false,
+  },
+  compodium: {
+    includeLibraryCollections: false,
   },
   i18n: {
     defaultLocale: 'en',

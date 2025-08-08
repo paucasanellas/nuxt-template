@@ -30,6 +30,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@compodium/nuxt": "0.1.0-beta.11",
     "@nuxt/eslint-config": "^1.8.0",
     "@nuxt/test-utils": "3.19.2",
     "@tailwindcss/typography": "^0.5.16",
