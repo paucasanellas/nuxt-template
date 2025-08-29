@@ -20,45 +20,36 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@nuxt/ui": "^3.3.0",
-    "@nuxtjs/i18n": "^10.0.3",
+    "@nuxt/ui": "^3.3.2",
+    "@nuxtjs/i18n": "^10.0.6",
     "@pinia/nuxt": "^0.11.2",
     "nuxt": "^4.0.3",
     "pinia": "^3.0.3",
-    "vue": "^3.5.18",
+    "vue": "^3.5.20",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@compodium/nuxt": "0.1.0-beta.11",
-    "@nuxt/eslint-config": "^1.8.0",
+    "@nuxt/eslint-config": "^1.9.0",
     "@nuxt/test-utils": "3.19.2",
     "@tailwindcss/typography": "^0.5.16",
-    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "^3.2.4",
-    "eslint": "^9.32.0",
+    "eslint": "^9.34.0",
     "happy-dom": "^18.0.1",
     "husky": "^9.1.7",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "^4.1.12",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ]
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "@tailwindcss/oxide",
-      "esbuild",
-      "unrs-resolver",
-      "vue-demi"
     ]
   }
 }
