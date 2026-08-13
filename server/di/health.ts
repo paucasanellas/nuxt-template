@@ -1,8 +1,9 @@
 import { asClass } from 'awilix'
+
 import { HealthChecker } from '~~/server/contexts/health/application/HealthChecker'
-import { NitroGetHealthController } from '~~/server/contexts/health/ui/NitroGetHealthController'
+import { HealthGetController } from '~~/server/contexts/health/ui/HealthGetController'
 
 export const health = {
   healthChecker: asClass(HealthChecker).singleton(),
-  nitroGetHealthController: asClass(NitroGetHealthController).singleton(),
+  healthGetController: asClass(HealthGetController).singleton(),
 }
