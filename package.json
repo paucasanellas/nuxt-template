@@ -1,5 +1,6 @@
 {
   "name": "nuxt-template",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
   "engines": {
@@ -19,11 +20,14 @@
   "dependencies": {
     "@nuxt/ui": "^4.10.0",
     "@pinia/nuxt": "^1.0.1",
+    "awilix": "^13.0.5",
     "nuxt": "^4.5.2",
     "pinia": "^4.0.2"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.123",
     "@nuxt/eslint-config": "^1.17.0",
+    "@types/node": "^24.13.3",
     "eslint": "^10.8.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",

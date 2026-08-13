@@ -1,3 +1,5 @@
+import { version } from './package.json'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
@@ -22,6 +24,11 @@ export default defineNuxtConfig({
   ],
   colorMode: {
     preference: 'light',
+  },
+  runtimeConfig: {
+    public: {
+      version,
+    },
   },
   compatibilityDate: 'latest',
 })
