@@ -29,12 +29,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version,
+      i18n: {
+        baseUrl: '',
+      },
     },
   },
   compatibilityDate: 'latest',
   telemetry: false,
   i18n: {
-    baseUrl: 'https://template.app',
     defaultLocale: 'es',
     strategy: 'no_prefix',
     locales: [
