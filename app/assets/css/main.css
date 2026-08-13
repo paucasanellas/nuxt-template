@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-display: 'Manrope', system-ui, -apple-system, sans-serif;
+}
