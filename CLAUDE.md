@@ -31,7 +31,9 @@ Run `pnpm lint` and `pnpm typecheck` before considering a change done. There is 
 
 Husky executes hook files with `sh -e`, so each check goes on its own line and the hook aborts at the first non-zero exit. Adding a gate means appending a line, not extending an `&&` chain.
 
-`.github/workflows/ci.yml` runs two jobs in parallel on pull requests to `main`: `quality` (lint, then typecheck) and `build`. Neither declares `needs`, which is what makes them concurrent — adding `needs` would serialise them. Both use `pnpm/setup@v2`, which installs pnpm, installs Node and runs `pnpm install` in one step, reading the versions from `packageManager` and `devEngines.runtime` in `package.json` — that's where a Node or pnpm version bump goes, not in the workflow.
+`.github/workflows/ci.yml` runs on pull requests to `main`: `quality` (lint, then typecheck) first, then `build`, which declares `needs: quality` and is skipped if quality fails. Both use `pnpm/setup@v2`, which installs pnpm, installs Node and runs `pnpm install` in one step, reading the versions from `packageManager` and `devEngines.runtime` in `package.json` — that's where a Node or pnpm version bump goes, not in the workflow.
+
+The `concurrency` group keys on the pull request number, so pushing again cancels the run still in flight rather than queueing a second one.
 
 Job ids stay plain (`quality`, `build`) because they are what a branch-protection ruleset references; the emoji live on step names only.
 

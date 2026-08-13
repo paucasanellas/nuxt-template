@@ -55,13 +55,15 @@ Three gates run the same checks at different moments, so nothing reaches `main` 
 | --- | --- | --- |
 | `.husky/commit-msg` | every `git commit` | `commitlint --edit` on the message |
 | `.husky/pre-push` | every `git push` | `pnpm lint`, then `pnpm typecheck` |
-| `.github/workflows/ci.yml` | pull requests to `main` | two parallel jobs — `quality` (`pnpm lint`, then `pnpm typecheck`) and `build` (`pnpm build`) |
+| `.github/workflows/ci.yml` | pull requests to `main` | `quality` (`pnpm lint`, then `pnpm typecheck`), and `build` (`pnpm build`) once it passes |
 
 The hooks install themselves through the `prepare` script on `pnpm install`. To skip them in an emergency: `git commit --no-verify` / `git push --no-verify`.
 
 **Commit messages** follow [Conventional Commits](https://www.conventionalcommits.org). The config is the `commitlint` field in `package.json`, extending `@commitlint/config-conventional` with no overrides — so its defaults apply: the eleven standard types, a header of at most 100 characters, a lowercase subject with no trailing period, and a blank line before body and footer.
 
 **Node and pnpm versions** live in `package.json`: `devEngines.runtime` and `packageManager`. CI reads both from there, so there is a single source of truth.
+
+Pushing again to a pull request cancels the run still in flight, so only the latest commit is ever checked.
 
 Making CI *block* a merge is a repository setting, not a file — add a ruleset on `main` requiring both the `quality` and `build` checks.
 
