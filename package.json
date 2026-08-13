@@ -25,6 +25,7 @@
     "pinia": "^4.0.2"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.123",
     "@nuxt/eslint-config": "^1.17.0",
     "@types/node": "^24.13.3",
     "eslint": "^10.8.1",
