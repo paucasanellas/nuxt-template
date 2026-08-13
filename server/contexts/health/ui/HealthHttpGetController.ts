@@ -6,7 +6,7 @@ interface Dependencies {
   healthChecker: HealthChecker
 }
 
-export class HealthGetController {
+export class HealthHttpGetController {
   private readonly healthChecker: HealthChecker
 
   constructor({ healthChecker }: Dependencies) {
