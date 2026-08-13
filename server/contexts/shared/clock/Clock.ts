@@ -4,6 +4,8 @@ export class Clock {
   }
 
   uptimeSeconds(): number {
-    return Math.round(process.uptime())
+    return Math.round(
+      process.uptime(),
+    )
   }
 }

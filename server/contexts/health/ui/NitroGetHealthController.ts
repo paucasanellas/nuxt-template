@@ -1,7 +1,6 @@
 import { setResponseHeader } from 'h3'
 
 import type { HealthChecker } from '~~/server/contexts/health/application/HealthChecker'
-import { toHealthResponse } from '~~/server/contexts/health/ui/HealthResponseMapper'
 import type { HealthResponse } from '~~/shared/types/health'
 import type { ServerEvent } from '~~/shared/types/server'
 
@@ -19,6 +18,6 @@ export class NitroGetHealthController {
   run(event: ServerEvent): HealthResponse {
     setResponseHeader(event, 'cache-control', 'no-store')
 
-    return toHealthResponse(this.healthChecker.check())
+    return this.healthChecker.check()
   }
 }

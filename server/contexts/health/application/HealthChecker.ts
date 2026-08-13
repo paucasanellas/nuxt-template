@@ -20,7 +20,7 @@ export class HealthChecker {
   check(): HealthReport {
     return {
       status: 'ok',
-      checkedAt: this.clock.now(),
+      checkedAt: this.clock.now().toISOString(),
       uptime: this.clock.uptimeSeconds(),
       version: this.config.version(),
     }
