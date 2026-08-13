@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -34,6 +34,7 @@ jobs:
         run: pnpm typecheck
 
   build:
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Check out the repository
