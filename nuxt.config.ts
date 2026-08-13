@@ -2,6 +2,7 @@ import { version } from './package.json'
 
 export default defineNuxtConfig({
   modules: [
+    '@nuxtjs/i18n',
     '@nuxt/ui',
     '@pinia/nuxt',
   ],
@@ -28,7 +29,20 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version,
+      i18n: {
+        baseUrl: '',
+      },
     },
   },
   compatibilityDate: 'latest',
+  telemetry: false,
+  i18n: {
+    defaultLocale: 'es',
+    strategy: 'no_prefix',
+    locales: [
+      { code: 'es', language: 'es', file: 'es.json' },
+    ],
+    langDir: 'locales',
+    restructureDir: './app',
+  },
 })
