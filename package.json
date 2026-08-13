@@ -3,8 +3,15 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "packageManager": "pnpm@11.21.0",
   "engines": {
     "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.11.0"
+    }
   },
   "scripts": {
     "build": "nuxt build",
@@ -12,6 +19,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "prepare": "husky",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "vue-tsc --build --noEmit",
@@ -26,12 +34,18 @@
     "pinia": "^4.0.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
     "@iconify-json/lucide": "^1.2.123",
     "@nuxt/eslint-config": "^1.17.0",
     "@types/node": "^24.13.3",
     "eslint": "^10.8.1",
+    "husky": "^9.1.7",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.9"
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
   }
 }

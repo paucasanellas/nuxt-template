@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  HUSKY: '0'
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Check out the repository
+        uses: actions/checkout@v7
+
+      - name: 📦 Set up pnpm and Node, then install dependencies
+        uses: pnpm/setup@v2
+        with:
+          cache: true
+
+      - name: 🧹 Lint
+        run: pnpm lint
+
+      - name: 🔍 Typecheck
+        run: pnpm typecheck
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Check out the repository
+        uses: actions/checkout@v7
+
+      - name: 📦 Set up pnpm and Node, then install dependencies
+        uses: pnpm/setup@v2
+        with:
+          cache: true
+
+      - name: 🏗️ Build for production
+        run: pnpm build

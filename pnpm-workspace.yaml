@@ -2,3 +2,13 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
   vue-demi: true
+minimumReleaseAgeExclude:
+  - '@commitlint/cli@21.2.2'
+  - '@commitlint/config-conventional@21.2.2'
+  - '@commitlint/format@21.2.2'
+  - '@commitlint/is-ignored@21.2.2'
+  - '@commitlint/lint@21.2.2'
+  - '@commitlint/load@21.2.2'
+  - '@commitlint/parse@21.2.2'
+  - '@commitlint/resolve-extends@21.2.2'
+  - '@commitlint/rules@21.2.2'

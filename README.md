@@ -12,6 +12,8 @@ Base template for starting Nuxt 4 projects. Clone it, rename the project, and bu
 | [Pinia](https://pinia.vuejs.org) | 4.0 | stores in `app/stores/*.store.ts` |
 | ESLint | 10 | `@nuxt/eslint-config` with `stylistic` — formats without Prettier |
 | TypeScript | 5.9 | typechecked with `vue-tsc` |
+| husky | 9.1 | `pre-push` and `commit-msg` hooks, installed by the `prepare` script |
+| commitlint | 21.2 | Conventional Commits, `commitlint` field in `package.json` |
 
 ## Requirements
 
@@ -44,6 +46,24 @@ pnpm typecheck:watch  # same, in watch mode
 No test framework is installed yet.
 
 **Environment variables.** Declared in `.env.example` (which is tracked) and read through `runtimeConfig` in `nuxt.config.ts`, not via `process.env` from app code.
+
+## Quality gates
+
+Three gates run the same checks at different moments, so nothing reaches `main` unlinted or untyped.
+
+| Gate | When | What runs |
+| --- | --- | --- |
+| `.husky/commit-msg` | every `git commit` | `commitlint --edit` on the message |
+| `.husky/pre-push` | every `git push` | `pnpm lint`, then `pnpm typecheck` |
+| `.github/workflows/ci.yml` | pull requests to `main` | two parallel jobs — `quality` (`pnpm lint`, then `pnpm typecheck`) and `build` (`pnpm build`) |
+
+The hooks install themselves through the `prepare` script on `pnpm install`. To skip them in an emergency: `git commit --no-verify` / `git push --no-verify`.
+
+**Commit messages** follow [Conventional Commits](https://www.conventionalcommits.org). The config is the `commitlint` field in `package.json`, extending `@commitlint/config-conventional` with no overrides — so its defaults apply: the eleven standard types, a header of at most 100 characters, a lowercase subject with no trailing period, and a blank line before body and footer.
+
+**Node and pnpm versions** live in `package.json`: `devEngines.runtime` and `packageManager`. CI reads both from there, so there is a single source of truth.
+
+Making CI *block* a merge is a repository setting, not a file — add a ruleset on `main` requiring both the `quality` and `build` checks.
 
 ## Documentation
 
