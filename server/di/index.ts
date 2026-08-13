@@ -1,4 +1,5 @@
 import { createContainer } from 'awilix'
+
 import { health } from '~~/server/di/health'
 import { shared } from '~~/server/di/shared'
 
