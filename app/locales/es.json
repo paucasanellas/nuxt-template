@@ -1,1 +1,25 @@
-{}
+{
+  "app": {
+    "name": "nuxt-template",
+    "tagline": "Una plantilla de Nuxt 4 con las decisiones ya tomadas"
+  },
+  "nav": {
+    "stack": "Stack",
+    "conventions": "Convenciones",
+    "start": "Empezar",
+    "repository": "Repositorio"
+  },
+  "actions": {
+    "changeLanguage": "Cambiar de idioma",
+    "changeTheme": "Cambiar de tema",
+    "openRepository": "Abrir el repositorio en GitHub"
+  },
+  "footer": {
+    "rights": "Clónala y hazla tuya.",
+    "version": "Versión {version}",
+    "links": {
+      "nuxt": "Documentación de Nuxt",
+      "ui": "Componentes de Nuxt UI"
+    }
+  }
+}

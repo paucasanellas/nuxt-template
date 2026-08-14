@@ -4,4 +4,9 @@ export default createConfigForNuxt({
   features: {
     stylistic: true,
   },
+}).append({
+  files: ['**/*.vue'],
+  rules: {
+    'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
+  },
 })

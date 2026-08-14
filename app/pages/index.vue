@@ -1,5 +1,9 @@
 <template>
-  <div>
-    <NuxtWelcome />
-  </div>
+  <UPage>
+    <HomeHero />
+    <HomeStack />
+    <HomeConventions />
+    <HomeStart />
+    <HomeCta />
+  </UPage>
 </template>

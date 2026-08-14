@@ -47,3 +47,8 @@ jobs:
 
       - name: 🏗️ Build for production
         run: pnpm build
+
+      - name: 📄 Generate the static site
+        run: pnpm generate
+        env:
+          NITRO_PRESET: github-pages

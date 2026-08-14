@@ -26,6 +26,7 @@
     "typecheck:watch": "vue-tsc --build --noEmit --watch"
   },
   "dependencies": {
+    "@nuxt/content": "^3.15.2",
     "@nuxt/ui": "^4.10.0",
     "@nuxtjs/i18n": "^10.6.0",
     "@pinia/nuxt": "^1.0.1",
@@ -38,6 +39,7 @@
     "@commitlint/config-conventional": "^21.2.2",
     "@iconify-json/lucide": "^1.2.123",
     "@nuxt/eslint-config": "^1.17.0",
+    "@nuxtjs/mdc": "^0.22.2",
     "@types/node": "^24.13.3",
     "eslint": "^10.8.1",
     "husky": "^9.1.7",
@@ -46,6 +48,8 @@
     "vue-tsc": "^3.3.9"
   },
   "commitlint": {
-    "extends": ["@commitlint/config-conventional"]
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }

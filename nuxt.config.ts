@@ -3,6 +3,7 @@ import { version } from './package.json'
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
+    '@nuxt/content',
     '@nuxt/ui',
     '@pinia/nuxt',
   ],
@@ -24,23 +25,38 @@ export default defineNuxtConfig({
     '@/assets/css/animations.css',
   ],
   colorMode: {
-    preference: 'light',
+    preference: 'system',
+  },
+  content: {
+    experimental: {
+      sqliteConnector: 'native',
+    },
   },
   runtimeConfig: {
     public: {
       version,
+      repositoryUrl: 'https://github.com/pcasanellas-dogfy/nuxt-template',
       i18n: {
         baseUrl: '',
       },
     },
   },
   compatibilityDate: 'latest',
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', '/es'],
+      failOnError: true,
+    },
+  },
   telemetry: false,
   i18n: {
-    defaultLocale: 'es',
-    strategy: 'no_prefix',
+    defaultLocale: 'en',
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: false,
     locales: [
-      { code: 'es', language: 'es', file: 'es.json' },
+      { code: 'en', language: 'en-US', name: 'English', file: 'en.json' },
+      { code: 'es', language: 'es-ES', name: 'Español', file: 'es.json' },
     ],
     langDir: 'locales',
     restructureDir: './app',

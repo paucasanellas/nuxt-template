@@ -1,74 +1,75 @@
 # nuxt-template
 
-Base template for starting Nuxt 4 projects. Clone it, rename the project, and build on top of the conventions it already wires up.
+A Nuxt 4 starter with the decisions already made: two languages, page copy in Nuxt Content,
+Nuxt UI 4 with Tailwind 4, Pinia, an awilix DI container for server routes, and quality gates
+on commit and push.
 
-## Stack
-
-| Piece | Version | Notes |
-| --- | --- | --- |
-| [Nuxt](https://nuxt.com) | 4.5 | `srcDir` is `app/`, no `server/` yet |
-| [Nuxt UI](https://ui.nuxt.com) | 4.10 | `U*` components, theme in `app/app.config.ts` |
-| [Tailwind CSS](https://tailwindcss.com) | 4.3 | no JS config: tokens live in `@theme` inside `app/assets/css/main.css` |
-| [Pinia](https://pinia.vuejs.org) | 4.0 | stores in `app/stores/*.store.ts` |
-| ESLint | 10 | `@nuxt/eslint-config` with `stylistic` — formats without Prettier |
-| TypeScript | 5.9 | typechecked with `vue-tsc` |
-| husky | 9.1 | `pre-push` and `commit-msg` hooks, installed by the `prepare` script |
-| commitlint | 21.2 | Conventional Commits, `commitlint` field in `package.json` |
-
-## Requirements
-
-- Node `^22.19.0 || ^24.11.0 || >=26.0.0` (what Nuxt 4.5 requires)
-- pnpm (the repo uses `pnpm-lock.yaml`)
+The home page documents the template itself, in English and Spanish. Read
+[CLAUDE.md](./CLAUDE.md) for the conventions in full.
 
 ## Getting started
 
 ```bash
 pnpm install
-cp .env.example .env
 pnpm dev
 ```
 
-The dev server runs at **http://localhost:8000**
+The dev server listens on **8000**, not 3000 — `.env` sets `PORT` and Nitro picks it up.
 
-## Scripts
+## Commands
 
 ```bash
-pnpm dev              # development server
-pnpm build            # production build
+pnpm dev              # dev server — http://localhost:8000
+pnpm build            # production build (SSR)
 pnpm preview          # serve the production build locally
-pnpm generate         # static prerender
+pnpm generate         # static prerender into .output/public
 pnpm lint             # eslint .
 pnpm lint:fix         # eslint . --fix
 pnpm typecheck        # vue-tsc --build --noEmit
 pnpm typecheck:watch  # same, in watch mode
 ```
 
-No test framework is installed yet.
+`pnpm lint` and `pnpm typecheck` run on `pre-push` and in CI. Running both before pushing is
+the cheaper path.
 
-**Environment variables.** Declared in `.env.example` (which is tracked) and read through `runtimeConfig` in `nuxt.config.ts`, not via `process.env` from app code.
+## Languages
 
-## Quality gates
+English is the default and lives at `/`. Spanish lives at `/es`. Both are prerendered, so both
+are indexable.
 
-Three gates run the same checks at different moments, so nothing reaches `main` unlinted or untyped.
+- Section copy comes from `content/en/index.yml` and `content/es/index.yml`, validated against
+  the schema in `content.config.ts`.
+- Interface strings — navigation, footer, aria-labels — come from `app/locales/en.json` and
+  `app/locales/es.json`.
 
-| Gate | When | What runs |
-| --- | --- | --- |
-| `.husky/commit-msg` | every `git commit` | `commitlint --edit` on the message |
-| `.husky/pre-push` | every `git push` | `pnpm lint`, then `pnpm typecheck` |
-| `.github/workflows/ci.yml` | pull requests to `main` | `quality` (`pnpm lint`, then `pnpm typecheck`), and `build` (`pnpm build`) once it passes |
+Adding a language means adding a locale in `nuxt.config.ts`, a JSON file in `app/locales/`, a
+directory under `content/`, a collection pair in `content.config.ts`, and its route to
+`nitro.prerender.routes`.
 
-The hooks install themselves through the `prepare` script on `pnpm install`. To skip them in an emergency: `git commit --no-verify` / `git push --no-verify`.
+## Environment
 
-**Commit messages** follow [Conventional Commits](https://www.conventionalcommits.org). The config is the `commitlint` field in `package.json`, extending `@commitlint/config-conventional` with no overrides — so its defaults apply: the eleven standard types, a header of at most 100 characters, a lowercase subject with no trailing period, and a blank line before body and footer.
+`.env.example` is the tracked contract. Every variable the app reads belongs there, and is
+consumed through `runtimeConfig` in `nuxt.config.ts` rather than `process.env` in app code.
 
-**Node and pnpm versions** live in `package.json`: `devEngines.runtime` and `packageManager`. CI reads both from there, so there is a single source of truth.
+## Deploying to GitHub Pages
 
-Pushing again to a pull request cancels the run still in flight, so only the latest commit is ever checked.
+`pnpm generate` produces a fully static site in `.output/public`. The `github-pages` Nitro
+preset adds `.nojekyll` and the `404.html` fallback.
 
-Making CI *block* a merge is a repository setting, not a file — add a ruleset on `main` requiring both the `quality` and `build` checks.
+For a **project site** served from a repository subpath:
 
-## Documentation
+```bash
+NITRO_PRESET=github-pages NUXT_APP_BASE_URL=/<repository>/ pnpm generate
+```
 
-- [Nuxt](https://nuxt.com/docs/getting-started/introduction) · [deployment](https://nuxt.com/docs/getting-started/deployment)
-- [Nuxt UI](https://ui.nuxt.com/getting-started)
-- [Tailwind CSS v4](https://tailwindcss.com/docs)
+For a **user site or custom domain** served from the root, the base URL can be left alone:
+
+```bash
+NITRO_PRESET=github-pages pnpm generate
+```
+
+`NUXT_APP_BASE_URL` is Nuxt's own default source for `app.baseURL`, so nothing in
+`nuxt.config.ts` needs to change — and `pnpm dev` keeps serving from the root.
+
+Server routes under `server/` are not part of a static build. `pnpm build` and `pnpm preview`
+still run the full SSR app, `/health` included.

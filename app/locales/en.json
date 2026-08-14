@@ -1,0 +1,25 @@
+{
+  "app": {
+    "name": "nuxt-template",
+    "tagline": "A Nuxt 4 starter with the decisions already made"
+  },
+  "nav": {
+    "stack": "Stack",
+    "conventions": "Conventions",
+    "start": "Get started",
+    "repository": "Repository"
+  },
+  "actions": {
+    "changeLanguage": "Change language",
+    "changeTheme": "Change theme",
+    "openRepository": "Open the repository on GitHub"
+  },
+  "footer": {
+    "rights": "Clone it and make it yours.",
+    "version": "Version {version}",
+    "links": {
+      "nuxt": "Nuxt docs",
+      "ui": "Nuxt UI components"
+    }
+  }
+}
