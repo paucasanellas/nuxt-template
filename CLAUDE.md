@@ -78,19 +78,22 @@ split inside: `shared/config/domain/Config.ts` is the port, and
 `shared/config/infrastructure/providers/NitroRuntimeConfig.ts` — the adapter over Nuxt's
 `useRuntimeConfig()` — is registered as `config` in the container.
 
-**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
+**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/config/ui.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
 
 Manrope really is self-hosted: `@nuxt/fonts` arrives as a dependency of `@nuxt/ui`, which auto-registers it with weights 400–700, and it reads families from the Tailwind `@theme`.
 
-Reach for a Nuxt UI `U*` component and existing tokens before writing hand-rolled markup or CSS. If a design needs a new colour or font, add it to the `@theme` block or `app.config.ts` so it stays a token, rather than hardcoding the value in a component.
+Reach for a Nuxt UI `U*` component and existing tokens before writing hand-rolled markup or CSS. If a design needs a new colour or font, add it to the `@theme` block or `app/config/ui.ts` so it stays a token, rather than hardcoding the value in a component.
 
 **Styling uses stock Tailwind classes only — no custom `@utility`, no `@apply`, no custom `--text-*` font-size tokens.** Type scales are composed from Tailwind's own classes (`text-4xl sm:text-6xl leading-none tracking-tight font-bold`), responsive variants standing in for `clamp()`. The `--text-*` ban is also a correctness issue: Nuxt UI merges classes with tailwind-merge, which cannot tell a custom `text-foo` from a text *colour* and silently drops it in favour of `text-highlighted`.
 
-To replace a Nuxt UI slot's classes outright rather than append to them, pass a function: `:ui="{ title: () => 'text-3xl font-bold text-highlighted' }"`. That is the supported escape hatch when the theme's own classes conflict with yours, and it works in `app.config.ts` too — which is where this template uses it.
+To replace a Nuxt UI slot's classes outright rather than append to them, pass a function: `:ui="{ title: () => 'text-3xl font-bold text-highlighted' }"`. That is the supported escape hatch when the theme's own classes conflict with yours, and it works in the app config too — which is where this template uses it.
 
-**Section standardisation lives in `app/app.config.ts`, not in the views.** `ui.pageHero`,
-`ui.pageSection` and `ui.pageCTA` carry the padding, typography and left alignment, so every section
-matches, and it is the only place a section's look is defined. Two traps:
+**Section standardisation lives in `app/config/ui.ts`, not in the views.** `app/app.config.ts` only
+does `import { ui } from '@/config/ui'` plus `defineAppConfig({ ui })`; the whole `ui` object —
+colors and the per-component theme (`pageHero`, `pageSection`, `pageCTA`) — lives in that one file,
+and theming a new component means growing it, not `app.config.ts`. Nuxt does not scan `app/config/`,
+so nothing in it is auto-imported. This is the only place a section's look is defined — it carries
+the padding, typography and left alignment, so every section matches. Two traps:
 
 - **The config key is the component's own name, and case matters.** It is `pageCTA`, not `pageCta` —
   a mistyped key is ignored in silence. Confirm with
