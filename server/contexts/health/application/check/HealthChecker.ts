@@ -1,22 +1,18 @@
 import type { Health } from '~~/server/contexts/health/domain/Health'
-
-import type { Config } from '~~/server/contexts/shared/config/Config'
+import type { HealthProvider } from '~~/server/contexts/health/domain/HealthProvider'
 
 interface Dependencies {
-  config: Config
+  healthProvider: HealthProvider
 }
 
 export class HealthChecker {
-  private readonly config: Config
+  private readonly healthProvider: HealthProvider
 
-  constructor({ config }: Dependencies) {
-    this.config = config
+  constructor({ healthProvider }: Dependencies) {
+    this.healthProvider = healthProvider
   }
 
-  check(): Health {
-    return {
-      status: 'ok',
-      version: this.config.version,
-    }
+  check(): Promise<Health> {
+    return this.healthProvider.check()
   }
 }
