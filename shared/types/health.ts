@@ -1,8 +1,4 @@
-export type HealthStatus = 'ok' | 'degraded'
-
 export interface HealthResponse {
-  status: HealthStatus
-  checkedAt: string
-  uptime: number
+  status: 'ok'
   version: string
 }
