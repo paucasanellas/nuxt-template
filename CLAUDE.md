@@ -78,15 +78,15 @@ split inside: `shared/config/domain/Config.ts` is the port, and
 `shared/config/infrastructure/providers/NitroRuntimeConfig.ts` — the adapter over Nuxt's
 `useRuntimeConfig()` — is registered as `config` in the container.
 
-**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css`, `./utilities.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
+**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
 
 Manrope really is self-hosted: `@nuxt/fonts` arrives as a dependency of `@nuxt/ui`, which auto-registers it with weights 400–700, and it reads families from the Tailwind `@theme`.
 
 Reach for a Nuxt UI `U*` component and existing tokens before writing hand-rolled markup or CSS. If a design needs a new colour or font, add it to the `@theme` block or `app.config.ts` so it stays a token, rather than hardcoding the value in a component.
 
-**Never define a custom font size as a `--text-*` theme token.** Nuxt UI merges classes with tailwind-merge, which cannot tell a custom `text-foo` from a text *colour* and silently drops it in favour of `text-highlighted`. Custom type scales go in `@utility type-*`, which tailwind-merge leaves alone.
+**Styling uses stock Tailwind classes only — no custom `@utility`, no `@apply`, no custom `--text-*` font-size tokens.** Type scales are composed from Tailwind's own classes (`text-4xl sm:text-6xl leading-none tracking-tight font-bold`), responsive variants standing in for `clamp()`. The `--text-*` ban is also a correctness issue: Nuxt UI merges classes with tailwind-merge, which cannot tell a custom `text-foo` from a text *colour* and silently drops it in favour of `text-highlighted`.
 
-To replace a Nuxt UI slot's classes outright rather than append to them, pass a function: `:ui="{ title: () => 'type-display text-highlighted' }"`. That is the supported escape hatch when the theme's own classes conflict with yours, and it works in `app.config.ts` too — which is where this template uses it.
+To replace a Nuxt UI slot's classes outright rather than append to them, pass a function: `:ui="{ title: () => 'text-3xl font-bold text-highlighted' }"`. That is the supported escape hatch when the theme's own classes conflict with yours, and it works in `app.config.ts` too — which is where this template uses it.
 
 **Section standardisation lives in `app/app.config.ts`, not in the views.** `ui.pageHero`,
 `ui.pageSection` and `ui.pageCTA` carry the padding, typography and left alignment, so every section
@@ -121,19 +121,17 @@ export const useAppStore = defineStore('app', () => {
 
 `app/app.vue` wraps everything in `<UApp>` (required for Nuxt UI overlays/toasts) plus `NuxtRouteAnnouncer` and `NuxtLoadingIndicator`. Keep that shell intact.
 
-**One entrypoint, three stylesheets behind it.** `app/assets/css/main.css` is imports only, and is
+**One entrypoint, two stylesheets behind it.** `app/assets/css/main.css` is imports only, and is
 the single entry registered in the `css` array of `nuxt.config.ts`. The pieces it pulls in:
 `theme.css` (the `@theme` tokens — the Manrope font stack that `@nuxt/fonts` reads its families
-from), `utilities.css` (the `@utility type-*` type scale) and `animations.css` (the `.page-*` /
-`.layout-*` transition classes; `pageTransition` and `layoutTransition` are named and `out-in` in
-`nuxt.config.ts`, so renaming a transition there means renaming those classes too).
+from) and `animations.css` (the `.page-*` / `.layout-*` transition classes; `pageTransition` and
+`layoutTransition` are named and `out-in` in `nuxt.config.ts`, so renaming a transition there means
+renaming those classes too).
 
 **New CSS is added as an `@import` in `main.css`, never as another entry in the `css` array.** An
 entry in the `css` array is compiled outside the Tailwind root, so its Tailwind directives ship to
-the browser as literal at-rules — the browser ignores them and, for `@utility`, every `type-*`
-class silently stops existing (verify with
-`grep -o '\.type-display{[^}]*}' .output/public/_nuxt/*.css` after a build). The same applies to
-`@theme`: tokens declared outside the root never reach Tailwind or `@nuxt/fonts`.
+the browser as literal at-rules — the browser ignores them, and for `@theme` that means tokens
+declared outside the root never reach Tailwind or `@nuxt/fonts`.
 
 ## Content
 

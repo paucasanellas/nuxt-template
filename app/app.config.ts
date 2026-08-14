@@ -1,4 +1,4 @@
-const eyebrow = 'flex items-center gap-2 font-mono font-medium type-eyebrow text-dimmed'
+const eyebrow = 'flex items-center gap-2 font-mono text-xs leading-none tracking-widest font-medium text-dimmed'
 
 export default defineAppConfig({
   ui: {
@@ -11,7 +11,7 @@ export default defineAppConfig({
         container: 'py-20 sm:py-28 lg:py-32',
         wrapper: 'max-w-4xl',
         headline: 'mb-6',
-        title: () => 'type-display font-display text-pretty text-highlighted',
+        title: () => 'text-4xl sm:text-6xl lg:text-7xl leading-none tracking-tight font-bold font-display text-pretty text-highlighted',
         description: 'mt-6 max-w-2xl text-pretty text-lg text-muted sm:text-xl/8',
         body: 'mt-12',
         footer: 'mt-12',
@@ -34,7 +34,7 @@ export default defineAppConfig({
         container: 'py-16 sm:py-20 lg:py-24',
         header: 'max-w-3xl',
         headline: 'mb-5',
-        title: () => 'type-title font-display text-pretty text-highlighted',
+        title: () => 'text-3xl sm:text-4xl leading-tight tracking-tight font-bold font-display text-pretty text-highlighted',
         description: 'mt-5 text-pretty text-base text-muted sm:text-lg',
         body: 'mt-12',
       },
@@ -55,7 +55,7 @@ export default defineAppConfig({
       slots: {
         container: 'px-6 py-12 sm:px-10 sm:py-16 lg:px-12 lg:py-20',
         wrapper: 'max-w-3xl',
-        title: () => 'type-title font-display text-pretty text-highlighted',
+        title: () => 'text-3xl sm:text-4xl leading-tight tracking-tight font-bold font-display text-pretty text-highlighted',
         description: 'mt-5 text-pretty text-base text-muted sm:text-lg',
         footer: 'mt-10',
       },
