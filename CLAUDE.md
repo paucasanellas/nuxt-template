@@ -78,7 +78,7 @@ split inside: `shared/config/domain/Config.ts` is the port, and
 `shared/config/infrastructure/providers/NitroRuntimeConfig.ts` — the adapter over Nuxt's
 `useRuntimeConfig()` — is registered as `config` in the container.
 
-**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/config/ui.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
+**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/config/ui.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `secondary` is `lime` — the loud accent — and `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
 
 Manrope really is self-hosted: `@nuxt/fonts` arrives as a dependency of `@nuxt/ui`, which auto-registers it with weights 400–700, and it reads families from the Tailwind `@theme`.
 
