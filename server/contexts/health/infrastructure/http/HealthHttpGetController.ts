@@ -2,20 +2,30 @@ import { setResponseHeader } from 'h3'
 
 import type { HealthChecker } from '~~/server/contexts/health/application/check/HealthChecker'
 
+import type { Config } from '~~/server/contexts/shared/config/domain/Config'
+
 interface Dependencies {
   healthChecker: HealthChecker
+  config: Config
 }
 
 export class HealthHttpGetController {
   private readonly healthChecker: HealthChecker
+  private readonly config: Config
 
-  constructor({ healthChecker }: Dependencies) {
+  constructor({ healthChecker, config }: Dependencies) {
     this.healthChecker = healthChecker
+    this.config = config
   }
 
-  run(event: ServerEvent): Promise<GetHealthResponse> {
+  async run(event: ServerEvent): Promise<GetHealthResponse> {
     setResponseHeader(event, 'cache-control', 'no-store')
 
-    return this.healthChecker.check()
+    const health = await this.healthChecker.check()
+
+    return {
+      status: health.status,
+      version: this.config.version,
+    }
   }
 }
