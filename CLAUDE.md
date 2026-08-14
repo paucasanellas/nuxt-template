@@ -73,7 +73,9 @@ its ports — `Health`, `HealthProvider` — `application/<use-case>/` holds one
 `infrastructure/` holds the adapters: `infrastructure/http/` for controllers,
 `infrastructure/providers/` for port implementations named after their technology
 (`NitroHealthProvider`), all wired in `server/di/`); it is unrelated to page content and stays
-as is.
+as is. The cross-context `server/contexts/shared/` follows the same split: the `Config` port lives
+in its `domain/`, and `NitroRuntimeConfig` — the adapter over Nuxt's `useRuntimeConfig()` — in its
+`infrastructure/providers/`, registered as `config` in the container.
 
 **Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css`, `./utilities.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
 
