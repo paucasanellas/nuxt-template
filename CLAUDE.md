@@ -70,7 +70,7 @@ Nuxt 4 with `srcDir` defaulting to `app/`. `server/` holds Nitro routes with a h
 an awilix container (see `server/contexts/health` for the pattern: domain, application, ui, wired in
 `server/di/`); it is unrelated to page content and stays as is.
 
-**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint: it imports `tailwindcss` and `@nuxt/ui`, declares the Manrope font stack in an `@theme` block, and defines the type scale as `@utility type-display` / `type-title` / `type-eyebrow`. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
+**Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint: it imports `tailwindcss`, `@nuxt/ui` and `./utilities.css` (the `@utility type-display` / `type-title` / `type-eyebrow` type scale), and declares the Manrope font stack in an `@theme` block. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
 
 Manrope really is self-hosted: `@nuxt/fonts` arrives as a dependency of `@nuxt/ui`, which auto-registers it with weights 400–700, and it reads families from the Tailwind `@theme`.
 
@@ -113,12 +113,18 @@ export const useAppStore = defineStore('app', () => {
 
 `app/app.vue` wraps everything in `<UApp>` (required for Nuxt UI overlays/toasts) plus `NuxtRouteAnnouncer` and `NuxtLoadingIndicator`. Keep that shell intact.
 
-**Two CSS files, with different jobs.** `app/assets/css/main.css` holds the Tailwind and Nuxt UI
-imports, the `@theme` tokens and the `type-*` utilities — the design system. `app/assets/css/template.css`
-holds styles that exist only for this template, currently the `.page-*` / `.layout-*` transition
-classes. `pageTransition` and `layoutTransition` are named and `out-in` in `nuxt.config.ts`, so
-renaming a transition there means renaming those classes too. Any new global CSS file must be
-registered in the `css` array of `nuxt.config.ts`.
+**Three CSS files, with different jobs.** `app/assets/css/main.css` holds the Tailwind and Nuxt UI
+imports and the `@theme` tokens; `app/assets/css/utilities.css` holds the `@utility type-*` type
+scale; `app/assets/css/template.css` holds styles that exist only for this template, currently the
+`.page-*` / `.layout-*` transition classes. `pageTransition` and `layoutTransition` are named and
+`out-in` in `nuxt.config.ts`, so renaming a transition there means renaming those classes too.
+
+**A file containing Tailwind directives must be `@import`ed from `main.css`, never listed in the
+`css` array of `nuxt.config.ts`.** An entry in the `css` array is compiled outside the Tailwind
+root, so its `@utility` blocks ship to the browser as literal at-rules — the browser ignores them
+and every `type-*` class silently stops existing (verify with
+`grep -o '\.type-display{[^}]*}' .output/public/_nuxt/*.css` after a build). Plain CSS with no
+Tailwind directives, like `template.css`, is what the `css` array is for.
 
 ## Content
 
