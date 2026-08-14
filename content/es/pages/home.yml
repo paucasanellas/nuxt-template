@@ -1,69 +1,122 @@
-title: Una plantilla de Nuxt 4 con las decisiones ya tomadas
-description: Clónala, renómbrala y publica. Contenido tipado, dos idiomas, estado, un contenedor de dependencias y quality gates, ya conectados.
+title: Una plantilla de Nuxt 4 pensada para aplicaciones que escalan
+description: Contenido tipado, dos idiomas, un backend for frontend hexagonal y gates de calidad — conectados desde el primer commit.
 
 hero:
-  headline: nuxt-template/
-  title: Una plantilla que ya sabe dónde va cada cosa.
-  description: Clónala, renómbrala y publica. Contenido tipado, dos idiomas, estado, un contenedor de dependencias y las gates que mantienen el repo honesto vienen ya conectados.
+  title: Una plantilla de Nuxt para aplicaciones que escalan.
+  highlight: escalan
+  description: Empieza con la estructura que una aplicación grande acaba necesitando — contenido tipado, dos idiomas, un backend con la lógica detrás de puertos y los gates que mantienen honesto un repo que crece. Conectado desde el primer commit.
   links:
     - label: Usar esta plantilla
       to: https://github.com/paucasanellas/nuxt-template/generate
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
+    - label: Ver lo que viene conectado
+      to: '#stack'
+      color: secondary
+      variant: ghost
+      trailingIcon: i-lucide-arrow-down
 
 stack:
   headline: package.json
-  title: Lo que ya viene conectado
-  description: Las decisiones están tomadas, así que tu primer commit en un proyecto nuevo puede ser una funcionalidad en vez de una configuración.
+  title: Todo lo que necesita una app que crece, ya conectado
+  description: Nueve decisiones tomadas y conectadas entre sí, para que el primer commit de un proyecto nuevo sea una funcionalidad y no un setup.
   features:
     - title: Nuxt 4
+      icon: i-lucide-mountain
       description: srcDir es app/. Los componentes se auto-importan sin prefijo de ruta, así que el nombre del fichero es el del componente y tiene que ser único.
     - title: Nuxt UI 4
+      icon: i-lucide-panels-top-left
       description: Todos los componentes U*, tematizados desde un único app/config/ui.ts. Las vistas los componen directamente.
     - title: Tailwind 4
-      description: Sin fichero de configuración JS. Los tokens del tema se declaran en un bloque @theme dentro de main.css.
+      icon: i-lucide-palette
+      description: Sin fichero de configuración JS. Los tokens del tema viven en un bloque @theme y los estilos se limitan a clases estándar de Tailwind.
     - title: Nuxt Content 3
-      description: Las páginas son datos YAML validados por los schemas de zod de content.config.ts y tipados de extremo a extremo.
+      icon: i-lucide-file-text
+      description: Las páginas son datos YAML validados por schemas de zod y tipados de extremo a extremo. Tiene su propia sección más abajo.
     - title: Nuxt i18n 10
+      icon: i-lucide-languages
       description: Inglés en /, español en /es. Los textos de interfaz viven en app/locales y el copy de página en content/.
     - title: Pinia
-      description: Stores con sintaxis setup en app/stores, con el estado agrupado en un único objeto reactive.
+      icon: i-lucide-store
+      description: Stores con setup en app/stores, con el estado agrupado en un único objeto reactivo.
     - title: awilix
-      description: Un contenedor de dependencias estricto para las rutas de servidor, creado una vez y resuelto por petición.
+      icon: i-lucide-container
+      description: Un contenedor de DI estricto para las rutas del servidor, construido una vez y resuelto por petición.
     - title: ESLint stylistic
-      description: El formato es un error de lint, no una segunda herramienta. No hay config de Prettier que mantener sincronizada.
+      icon: i-lucide-align-left
+      description: El formato es un error de lint, no una segunda herramienta. No hay configuración de Prettier que mantener sincronizada.
     - title: Husky y commitlint
-      description: pre-push ejecuta lint y luego typecheck. commit-msg rechaza un mensaje que no parsee.
+      icon: i-lucide-shield-check
+      description: pre-push ejecuta lint y después typecheck. commit-msg rechaza un mensaje que no parsea.
 
-conventions:
+content:
   headline: shared/schemas/
-  title: Una página es un schema, una vista y dos YAML
-  description: El schema de zod es el contrato único — valida el YAML en cada build y tipa cada consulta. La vista compone secciones de Nuxt UI; el YAML lleva el copy en cada idioma.
+  title: Las páginas son contratos, no markup
+  description: Añadir la página diez es el mismo trabajo que añadir la primera — declarar un schema, añadir una vista y escribir un YAML por idioma. Las palabras nunca viven dentro de los componentes.
   features:
-    - title: shared/schemas/pricing.ts
-      description: El contrato. Schemas de elementos — Button, PageHero, PageSection — compuestos en el schema de la página, registrado como colección por idioma en content.config.ts.
-    - title: app/pages/pricing.vue
-      description: La vista. Enlaza el contenido tipado a secciones de Nuxt UI y es dueña de los anclajes y el layout.
-    - title: content/en/pages/pricing.yml
-      description: El contenido. Solo datos — copy, enlaces, features. Validado contra el schema, nunca contra un componente.
-    - title: content/es/pages/pricing.yml
-      description: La misma página en español. Misma forma de fichero, misma validación, otro idioma.
+    - title: Un contrato por página
+      icon: i-lucide-file-code
+      description: Los schemas de elemento — Button, PageHero, PageSection — se componen en el schema zod de cada página, registrado como colección por idioma en content.config.ts.
+    - title: Validado en cada build
+      icon: i-lucide-badge-check
+      description: El YAML se parsea contra el schema antes de publicarse. Un campo obligatorio ausente rompe el build, así que el copy no puede desviarse de lo que la vista espera.
+    - title: Tipado de extremo a extremo
+      icon: i-lucide-braces
+      description: queryCollection infiere su resultado del schema, así que la vista autocompleta el contenido que enlaza — sin casts ni adivinar formas.
+    - title: El copy, fuera de los componentes
+      icon: i-lucide-files
+      description: content/<locale>/pages contiene solo datos — títulos, enlaces, features. Rediseñar una vista no toca las palabras, y traducir no toca el código.
+
+backend:
+  headline: server/contexts/
+  title: Un backend for frontend en el mismo repo
+  description: Rutas de Nitro con arquitectura hexagonal — dominio y casos de uso en el centro, tecnología en los bordes. Un repo, un sistema de tipos, un deploy.
+  features:
+    - title: server/contexts/health/domain
+      description: El modelo y sus puertos. Los casos de uso dependen de interfaces — nada en la lógica de negocio sabe que Nitro existe.
+    - title: server/di
+      description: Un contenedor de awilix en modo estricto, construido una vez al arrancar. Las rutas resuelven su controlador del contenedor; nada hace new de sus dependencias.
+    - title: infrastructure/providers/NitroHealthProvider.ts
+      description: Los adaptadores llevan el nombre de su tecnología y viven en el borde. Cambiar un proveedor — o sustituirlo por un doble en tests — no toca ningún caso de uso.
+    - title: server/routes/health
+      description: GET /health responde con GetHealthResponse, un tipo de shared/ que importan igual el servidor y la app. El contrato no puede bifurcarse, porque solo hay uno.
+
+i18n:
+  headline: content/es/
+  title: Más de un idioma desde el primer día
+  description: Inglés en /, español en /es. Añadir un idioma es añadir ficheros — cada capa ya sabe que existen los locales.
+  features:
+    - title: Rutas por idioma
+      icon: i-lucide-signpost
+      description: prefix_except_default deja el inglés en / y el español en /es. El selector de idioma ya está montado con useSwitchLocalePath.
+    - title: El mismo contrato por idioma
+      icon: i-lucide-copy
+      description: content/en y content/es contienen las mismas páginas, validadas por el mismo schema. Una traducción no puede saltarse un campo en silencio.
+    - title: Los textos de interfaz, aparte
+      icon: i-lucide-tags
+      description: Nav, footer y aria-labels viven en app/locales; el copy de página, en content/. Un titular y el label de un botón nunca comparten fichero.
+    - title: Decide la URL, no el navegador
+      icon: i-lucide-link
+      description: detectBrowserLanguage está desactivado a propósito. La URL es la única fuente del idioma, y así las rutas se comparten y se indexan bien.
 
 start:
   headline: README.md
   title: Tres comandos hasta tener la app corriendo
-  description: El servidor de desarrollo escucha en el 8000, no en el 3000 — .env fija el puerto y Nitro lo coge.
+  description: El servidor de desarrollo escucha en el 8000, no en el 3000 — .env fija el puerto y Nitro lo recoge.
   features:
     - title: pnpm install
-      description: Instala dependencias, ejecuta nuxt prepare e instala los hooks de git.
+      icon: i-lucide-download
+      description: Instala las dependencias, ejecuta nuxt prepare e instala los hooks de git.
     - title: pnpm dev
+      icon: i-lucide-play
       description: Sirve la app en localhost:8000 con las devtools activadas.
     - title: pnpm lint && pnpm typecheck
-      description: Las dos gates que ejecutan tanto pre-push como CI. Si aquí pasa, allí también.
+      icon: i-lucide-check-check
+      description: Los dos gates que ejecutan pre-push y la CI. Verde aquí significa verde allí.
 
 cta:
-  title: Empieza desde un repo que ya ha tomado estas decisiones
-  description: Renómbrala en package.json, sustituye el YAML de content/ y la home es tuya.
+  title: Escalar es el punto de partida, no un refactor
+  description: Clónala, renómbrala en package.json y sustituye los YAML de content/ — la estructura para la app que vas a hacer crecer ya está aquí.
   links:
     - label: Usar esta plantilla
       to: https://github.com/paucasanellas/nuxt-template/generate
@@ -71,7 +124,7 @@ cta:
       target: _blank
     - label: Leer las convenciones
       to: https://github.com/paucasanellas/nuxt-template/blob/main/CLAUDE.md
-      color: neutral
+      color: secondary
       variant: ghost
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
