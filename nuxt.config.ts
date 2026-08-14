@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version,
-      repositoryUrl: 'https://github.com/pcasanellas-dogfy/nuxt-template',
+      repositoryUrl: 'https://github.com/paucasanellas/nuxt-template',
       i18n: {
         baseUrl: '',
       },

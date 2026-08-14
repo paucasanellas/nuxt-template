@@ -7,7 +7,7 @@ hero:
   description: Clone it, rename it, ship. Typed content, two languages, state, a DI container and the gates that keep the repo honest are already wired together.
   links:
     - label: Use this template
-      to: https://github.com/pcasanellas-dogfy/nuxt-template/generate
+      to: https://github.com/paucasanellas/nuxt-template/generate
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
 
@@ -66,11 +66,11 @@ cta:
   description: Rename it in package.json, replace the YAML in content/, and the home page is yours.
   links:
     - label: Use this template
-      to: https://github.com/pcasanellas-dogfy/nuxt-template/generate
+      to: https://github.com/paucasanellas/nuxt-template/generate
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
     - label: Read the conventions
-      to: https://github.com/pcasanellas-dogfy/nuxt-template/blob/main/CLAUDE.md
+      to: https://github.com/paucasanellas/nuxt-template/blob/main/CLAUDE.md
       color: neutral
       variant: ghost
       trailingIcon: i-lucide-arrow-up-right

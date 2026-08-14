@@ -7,7 +7,7 @@ hero:
   description: Clónala, renómbrala y publica. Contenido tipado, dos idiomas, estado, un contenedor de dependencias y las gates que mantienen el repo honesto vienen ya conectados.
   links:
     - label: Usar esta plantilla
-      to: https://github.com/pcasanellas-dogfy/nuxt-template/generate
+      to: https://github.com/paucasanellas/nuxt-template/generate
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
 
@@ -66,11 +66,11 @@ cta:
   description: Renómbrala en package.json, sustituye el YAML de content/ y la home es tuya.
   links:
     - label: Usar esta plantilla
-      to: https://github.com/pcasanellas-dogfy/nuxt-template/generate
+      to: https://github.com/paucasanellas/nuxt-template/generate
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
     - label: Leer las convenciones
-      to: https://github.com/pcasanellas-dogfy/nuxt-template/blob/main/CLAUDE.md
+      to: https://github.com/paucasanellas/nuxt-template/blob/main/CLAUDE.md
       color: neutral
       variant: ghost
       trailingIcon: i-lucide-arrow-up-right
