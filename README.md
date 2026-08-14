@@ -1,11 +1,56 @@
 # nuxt-template
 
-A Nuxt 4 starter with the decisions already made: two languages, page copy in Nuxt Content,
-Nuxt UI 4 with Tailwind 4, Pinia, an awilix DI container for server routes, and quality gates
-on commit and push.
+A Nuxt 4 starter for building landings fast: **a page is a markdown file** that composes Nuxt UI
+components, in English and Spanish. Plus Tailwind 4, Pinia, an awilix DI container for server routes,
+and quality gates on commit and push.
 
-The home page documents the template itself, in English and Spanish. Read
-[CLAUDE.md](./CLAUDE.md) for the conventions in full.
+The home page documents the template itself. Read [CLAUDE.md](./CLAUDE.md) for the conventions in
+full.
+
+## Adding a page
+
+Create one markdown file per locale. That is the whole procedure — no `.vue` file, no route to
+register, no config to edit.
+
+```
+content/en/pages/pricing.md   →  /pricing
+content/es/pages/pricing.md   →  /es/pricing   (or /es/precios, see below)
+```
+
+A page is frontmatter for its metadata, then sections built from **Nuxt UI components**:
+
+```md
+---
+title: Pricing
+description: What it costs.
+path: /pricing
+---
+
+::u-page-hero
+---
+headline: pricing
+title: Simple pricing.
+description: >-
+  Prose that may safely contain a colon: like this one.
+links:
+  - label: Start now
+    to: /signup
+---
+::
+```
+
+Sections are `::u-page-hero`, `::u-page-section` and `::u-page-cta`, and their bodies use Nuxt UI's
+prose components: `::card-group` + `::card`, `::steps`, `::field-group` + `::field`, `::callout`,
+`::code-group`. There is no wrapper layer to learn — the markdown speaks Nuxt UI directly, and the
+padding, typography and alignment are standardised once in `app/app.config.ts`, so nothing in the
+markdown carries a styling decision.
+
+`path` is optional and lets you choose the URL per language: give the Spanish file `path: /precios`
+and it is served at `/es/precios`, with the language switcher following along.
+
+Two things to know before writing markdown: use `>-` for any prose in a YAML block, and never indent
+the body of a component block. Both fail silently. The full set of rules is in
+[CLAUDE.md](./CLAUDE.md).
 
 ## Getting started
 
@@ -37,14 +82,14 @@ the cheaper path.
 English is the default and lives at `/`. Spanish lives at `/es`. Both are prerendered, so both
 are indexable.
 
-- Section copy comes from `content/en/index.yml` and `content/es/index.yml`, validated against
-  the schema in `content.config.ts`.
+- Page copy comes from `content/en/pages/` and `content/es/pages/`, with the frontmatter validated
+  against the schema in `content.config.ts`.
 - Interface strings — navigation, footer, aria-labels — come from `app/locales/en.json` and
   `app/locales/es.json`.
 
 Adding a language means adding a locale in `nuxt.config.ts`, a JSON file in `app/locales/`, a
-directory under `content/`, a collection pair in `content.config.ts`, and its route to
-`nitro.prerender.routes`.
+`content/<locale>/pages/` directory, and a collection in `content.config.ts`. Prerender routes are
+derived from the content files, so those look after themselves.
 
 ## Environment
 

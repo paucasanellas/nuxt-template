@@ -4,10 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A reusable Nuxt 4 starter template, cloned as the base for new projects. It ships one page — a
-bilingual home that documents the template itself — plus the conventions that page demonstrates:
-view/container/presentational components, page copy in Nuxt Content, interface strings in i18n JSON,
-and an empty placeholder store in `app/stores/app.store.ts`.
+A reusable Nuxt 4 starter template, cloned as the base for new projects, built to produce **landings
+fast**: a page is a markdown file that composes generic components, in two languages. It ships one
+page — a bilingual home that documents the template itself — plus an empty placeholder store in
+`app/stores/app.store.ts`.
+
+The test of any change here: adding a landing must stay a matter of adding one markdown file per
+locale, with no `.vue` file and no config edit.
 
 Treat the existing files as the conventions to follow and extend, not as an app to refactor. When adding something here, ask whether every future project cloned from this template wants it.
 
@@ -88,25 +91,48 @@ Reach for a Nuxt UI `U*` component and existing tokens before writing hand-rolle
 
 **Never define a custom font size as a `--text-*` theme token.** Nuxt UI merges classes with tailwind-merge, which cannot tell a custom `text-foo` from a text *colour* and silently drops it in favour of `text-highlighted`. Custom type scales go in `@utility type-*`, which tailwind-merge leaves alone.
 
-To replace a Nuxt UI slot's classes outright rather than append to them, pass a function: `:ui="{ title: () => 'type-display text-highlighted' }"`. That is the supported escape hatch when the theme's own classes conflict with yours.
+To replace a Nuxt UI slot's classes outright rather than append to them, pass a function: `:ui="{ title: () => 'type-display text-highlighted' }"`. That is the supported escape hatch when the theme's own classes conflict with yours, and it works in `app.config.ts` too — which is where this template uses it.
+
+**Section standardisation lives in `app/app.config.ts`, not in the wrappers.** `ui.pageHero`,
+`ui.pageSection` and `ui.pageCTA` carry the padding, typography and left alignment, so every section
+matches, and it is the only place a section's look is defined. Three traps:
+
+- **The config key is the component's own name, and case matters.** It is `pageCTA`, not `pageCta` —
+  a mistyped key is ignored in silence. Confirm with
+  `grep -o 'appConfig.ui?.[a-zA-Z]*' node_modules/@nuxt/ui/dist/runtime/components/<Name>.vue`.
+- **Variants beat slots.** Nuxt UI's `vertical` orientation variant centres the title and links, so
+  overriding `slots.title` is not enough; the left alignment has to be set under
+  `variants.orientation.vertical` as well.
+
+**Nuxt UI prose classes are utilities, so they beat anything in `@layer components`.** Any rule in
+`template.css` that has to override a `Prose*` default must stay **unlayered** — inside a layer it
+silently loses the cascade.
 
 **`ULink` localizes `to` automatically** when i18n is present, so a path that is already localized gets prefixed a second time. Paths coming out of `useSwitchLocalePath()` must be passed with `locale: false` (see `AppHeaderActions.vue`), or `switchLocalePath('en')` → `/` comes back out as `/es`.
 
 **Components are auto-imported with `pathPrefix: false`** (`nuxt.config.ts`). A component at `app/components/forms/Field.vue` is `<Field />`, not `<FormsField />`. Component filenames must therefore be **globally unique** across all subdirectories, and must not collide with Nuxt UI's `U*` names or Nuxt built-ins.
 
-**view / container / presentational.** Components are grouped by context, with the context repeated in the filename because of `pathPrefix: false`:
+**A page is a markdown file; components are reusable and generic.** There is exactly one view,
+`app/pages/[...slug].vue`, which resolves the markdown for the current route and hands it to
+`ContentRenderer`. `app/components/` holds no page-specific or section-specific components at all:
 
-- **view** — `app/pages/index.vue`, or a layout for shared chrome. Composes sections and nothing else: no `<script setup>`, no logic, no fetching.
-- **container** — the root of one section, e.g. `app/components/home/hero/HomeHero.vue`. Reads what the section needs through an auto-imported composable and passes it down.
-- **presentational** — the partials of that container, e.g. `app/components/home/hero/HomeHeroTree.vue`. Props in, markup out.
+- **view** — `app/pages/[...slug].vue`, or a layout for shared chrome.
+- **page** — `content/<locale>/pages/<slug>.md`. Composes sections and carries the copy. No styling
+  decisions, no logic.
+- **section** — a Nuxt UI component used straight from the markdown: `::u-page-hero`,
+  `::u-page-section`, `::u-page-cta`, plus prose components like `::card-group` and `::steps`.
 
-Anything a second project would want lives under the `app` context with a layout as its view: `app/components/app/header/AppHeader.vue`, `app/components/app/footer/AppFooter.vue`. A presentational shared by several sections of one context goes in that context's `shared/` folder, e.g. `app/components/home/shared/HomeSectionEyebrow.vue`.
+**The markdown uses Nuxt UI components only.** There is no wrapper layer, and adding one is a
+regression: a wrapper is a second API to document and keep in sync with a component Nuxt UI already
+maintains. If a section needs a different look, it goes in `app/app.config.ts`; if it needs a one-off
+style, it goes in `app/assets/css/template.css`. The only components in the repo are `AppHeader` and
+`AppFooter`, which exist because they need `useI18n` and `useSwitchLocalePath`, and they live under
+`app/components/app/<family>/<component>/` following how Nuxt UI organises its own.
 
-Sections read data through a composable in `app/composables/`. Several containers may call the same one; `useAsyncData` with the same key dedupes the request. Guard on the data (`v-if`) rather than asserting it with `!`.
+You can check the rule holds: after a build, `node_modules/.cache/nuxt/.nuxt/content/components.ts`
+lists the components the markdown actually used. It should contain nothing but `U*` and `Prose*`.
 
-**Layouts.** `app/layouts/default.vue` is `AppHeader` + `UMain` + `AppFooter` with **no `UContainer`**, because `UHeader`, `UFooter`, `UPageHero`, `UPageSection` and `UPageCTA` each render one internally — wrapping them again double-pads everything. `app/layouts/contained.vue` adds the `UContainer` for pages rooted in `UPage` + `UPageHeader`, which do *not* self-contain. Check the family with `grep -rln UContainer node_modules/@nuxt/ui/dist/runtime/components/*.vue` before choosing.
-
-Keeping the landing on `default` is what lets `app/pages/index.vue` stay free of `definePageMeta`, and therefore free of a `<script setup>` block.
+**Layouts.** `app/layouts/default.vue` is `AppHeader` + `UMain` + `AppFooter` with **no `UContainer`**, because `UHeader`, `UFooter`, `UPageHero`, `UPageSection` and `UPageCTA` each render one internally — wrapping them again double-pads everything. A page that does need containment writes `::u-container` in its own markdown, the way the CTA section does. Check which components self-contain with `grep -rln UContainer node_modules/@nuxt/ui/dist/runtime/components/*.vue`.
 
 **Pinia stores** live in `app/stores/` and are named `<domain>.store.ts`. They use setup syntax with state grouped into a single `reactive` object exposed as `state`, following `app/stores/app.store.ts`:
 
@@ -126,16 +152,46 @@ export const useAppStore = defineStore('app', () => {
 (`strategy: 'prefix_except_default'`). `detectBrowserLanguage` is deliberately `false`: on static
 hosting the cookie redirect runs on the client over already-prerendered HTML, and the jump is visible.
 
-- **Section copy** lives in `content/<locale>/index.yml`, validated against the shared schema in
-  `content.config.ts`.
+- **Page copy** lives in `content/<locale>/pages/<slug>.md` — headings, body text, card text.
 - **Interface strings** — nav, footer, aria-labels — live in `app/locales/<locale>.json`.
 
 Don't mix them. A heading belongs to Content; a button's aria-label belongs to i18n.
 
-**Nuxt Content collections are one per page per locale**, named literally (`home_en`, `home_es`),
-because `queryCollection()` needs a literal to type its result. A new page means a new pair. They are
-`type: 'data'` over a single YAML file, so the schema stays exact instead of having to cover every
-page in the locale.
+**One `type: 'page'` collection per locale**, `pages_en` and `pages_es`, named literally because
+`queryCollection()` needs a literal to type its result. Each uses `source.cwd` to point at
+`content/<locale>/pages` with `prefix: '/'`, so the collection's own `path` is locale-free and
+matches the site route: `content/en/pages/index.md` → `/`, `content/es/pages/about.md` → `/about`
+inside `pages_es`. Without `cwd`, `stem` and `path` are relative to the content root instead
+(`en/pages/index`, `/en/pages`) and nothing matches.
+
+**Page resolution lives in two places, on purpose.** `shared/utils/content.ts` holds the pure
+functions — `pageCollection(locale)` builds the collection name and is the **single** place that casts
+to `keyof PageCollections`, because `queryCollection()` demands a literal; `contentPath()` and
+`pathSegments()` convert between route slugs and content paths. `app/composables/usePage.ts` is the
+part that talks to Content: the query, the 404, and the locale params. Nothing is keyed on a specific
+language, so a third locale is a collection in `content.config.ts` plus a locale in `nuxt.config.ts`
+and no code change.
+
+**The author decides the URL** with `path` in the frontmatter. It works because Content's
+`pathMetaTransformer` returns `{ path: filePath, ...content, … }` — the frontmatter spread comes after
+the computed path, so a declared `path` wins. Do **not** add `path` to the zod schema: the field is
+already required on `PageCollectionItemBase`, and declaring it optional there weakens the type to
+`string | undefined` for no reason.
+
+`stem` is the bridge between locales. It is assigned *after* the frontmatter spread, so it cannot be
+overridden, which makes it the stable identity of a page: `content/en/pages/pricing.md` and
+`content/es/pages/pricing.md` share `stem: pricing` while serving `/pricing` and `/es/precios`.
+`usePage()` uses it to find the sibling page and feeds `useSetI18nParams`, without which the locale
+switcher would send `/pricing` to `/es/pricing` and 404. (`i18n.pages` cannot help here: it maps route
+*names*, and a catch-all is one route for every page.)
+
+No page found means `createError({ statusCode: 404, fatal: true })`.
+
+**`nitro.prerender.routes` is derived from the content files** by `pageRoutes()` in
+`nuxt.config.ts`, which reads `content/<locale>/pages` at config time and honours a `path` declared in
+the frontmatter, falling back to the filename. A catch-all is invisible to the crawler, so without
+this every new landing would need a hand-written route entry — which would defeat the point. Adding a
+`.md` is genuinely all that is required.
 
 `content.experimental.sqliteConnector: 'native'` uses `node:sqlite` (Node 24) and avoids
 `better-sqlite3`, whose native build pnpm 11 would block behind `pnpm approve-builds`. In the browser
@@ -155,13 +211,83 @@ worse than the warning it fixed. When bumping `@nuxt/content`, read the `@nuxtjs
 `pnpm-lock.yaml`. This is a workaround for an upstream bug; drop it if MDC starts resolving its own
 nested deps.
 
+## Writing a page in MDC
+
+A section is a component block with a YAML block for its header and child components for its body:
+
+```md
+::u-page-section
+---
+id: stack
+headline: package.json
+title: What comes wired
+description: >-
+  Prose that may safely contain a colon: like this one.
+---
+:::card-group
+::::card{title="Nuxt 4"}
+Body text.
+::::
+:::
+::
+```
+
+Five rules, each of which fails **silently** if broken:
+
+1. **Always use `>-` for prose in a YAML block.** A bare `description:` whose text contains a colon
+   followed by a space is parsed as a nested map, and the component receives an object where it
+   expects a string. Nothing warns you; the section just renders wrong.
+2. **Never indent the body of a component block.** Indentation turns `#slot-name` markers and even
+   `:::` fences into paragraphs. Indent *only* the continuation lines inside a YAML block, where
+   indentation is what makes the block scalar work.
+3. **Nesting adds a colon per level:** `::` → `:::` → `::::`, and the closing fence must match its
+   opener. Past three levels, reconsider the structure.
+4. **Lists and objects are fine in the YAML block.** `links:` as a YAML list works — MDC stores it as
+   a `:links` prop holding JSON and the renderer binds it. Writing `:links='[…]'` by hand is never
+   necessary.
+5. **A component whose name has an uppercase acronym cannot be reached in kebab-case.**
+   `pascalCase('u-page-cta')` is `UPageCta`, not `UPageCTA`, so the tag silently fails to resolve —
+   and MDC lowercases the tag, so writing `::UPageCTA` does not help either. The fix is an entry in
+   `mdc.components.map` in `nuxt.config.ts`, which is why `'u-page-cta': 'UPageCTA'` is there. **In
+   dev it resolves anyway**, so this only shows up in a build.
+
+Prefer Nuxt UI's own prose components over new ones: `::card-group` + `::card`, `::steps`
+(numbers `###` headings with CSS counters), `::callout`, `::code-group`, `::tabs`. Nuxt UI registers
+43 of them here with no configuration, and MDC maps the short names — `ui.mdc` is deprecated and
+does not need setting. The full map is in `@nuxt/ui/dist/module.mjs`.
+
+**Components in markdown are discovered, not registered.** Content parses the markdown at build time
+and records the components each file uses, which feeds `#content/components`. In dev *every*
+component resolves; in a production build only the ones in that manifest (or marked `global`) do.
+**So a page that works in `pnpm dev` can still break in `pnpm build`** — always verify a markdown
+change against a real build, not just the dev server.
+
+**The dev content cache lies after an edit.** `.data/content/contents.sqlite` frequently keeps the
+previous parse of a file that has just changed, so the page you see and the AST you inspect can both
+be stale. When a markdown change appears not to work, `rm -rf .data` and restart before debugging
+anything else. To read the real AST:
+
+```bash
+node -e "const {DatabaseSync}=require('node:sqlite');
+const db=new DatabaseSync('.data/content/contents.sqlite');
+console.log(db.prepare('SELECT body FROM _content_pages_en').get().body)"
+```
+
+The body is in `minimark` format — nested `[tag, props, ...children]` arrays, not the older
+`{ type, tag, children }` tree.
+
 **No icon names in content.** A name coming out of YAML is not statically analysable, and Nuxt Icon
 here only bundles the icons Nuxt UI declares — anything else renders as an empty box. Pick chrome
 icons from that list, verified with
 `grep -rhoE "i-lucide-[a-z0-9-]+" node_modules/@nuxt/ui/dist | sort -u`, and keep package versions
 out of content too: they drift from `package.json` silently.
 
-**Transitions** are enabled globally: `pageTransition` and `layoutTransition` are both named and `out-in` in `nuxt.config.ts`, with the matching `.page-*` / `.layout-*` classes in `app/assets/css/animations.css`. Renaming a transition in the config means renaming those classes too. Any new global CSS file must be registered in the `css` array of `nuxt.config.ts`.
+**Two CSS files, with different jobs.** `app/assets/css/main.css` holds the Tailwind and Nuxt UI
+imports, the `@theme` tokens and the `type-*` utilities — the design system. `app/assets/css/template.css`
+holds styles that exist only for this template, currently the `.page-*` / `.layout-*` transition
+classes. `pageTransition` and `layoutTransition` are named and `out-in` in `nuxt.config.ts`, so
+renaming a transition there means renaming those classes too. Any new global CSS file must be
+registered in the `css` array of `nuxt.config.ts`.
 
 `app/app.vue` wraps everything in `<UApp>` (required for Nuxt UI overlays/toasts) plus `NuxtRouteAnnouncer` and `NuxtLoadingIndicator`. Keep that shell intact.
 
