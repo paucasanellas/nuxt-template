@@ -1,8 +1,5 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "./theme.css";
 @import "./utilities.css";
-
-@theme {
-  --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
-  --font-display: 'Manrope', system-ui, -apple-system, sans-serif;
-}
+@import "./animations.css";
