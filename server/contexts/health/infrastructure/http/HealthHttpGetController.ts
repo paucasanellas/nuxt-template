@@ -1,6 +1,6 @@
 import { setResponseHeader } from 'h3'
 
-import type { HealthChecker } from '~~/server/contexts/health/application/HealthChecker'
+import type { HealthChecker } from '~~/server/contexts/health/application/check/HealthChecker'
 
 interface Dependencies {
   healthChecker: HealthChecker

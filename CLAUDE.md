@@ -67,7 +67,8 @@ The hooks are installed by the `prepare` script, which coexists with the existin
 ## Architecture
 
 Nuxt 4 with `srcDir` defaulting to `app/`. `server/` holds Nitro routes with a hexagonal layout and
-an awilix container (see `server/contexts/health` for the pattern: `domain/`, `application/` and
+an awilix container (see `server/contexts/health` for the pattern: `domain/`,
+`application/<use-case>/` — one folder per use case, `application/check/HealthChecker.ts` — and
 `infrastructure/<adapter>` — `infrastructure/http/` for controllers, a future
 `infrastructure/persistence/` for repositories — wired in `server/di/`); it is unrelated to page
 content and stays as is.
