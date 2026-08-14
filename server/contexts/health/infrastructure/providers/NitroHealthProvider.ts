@@ -1,7 +1,7 @@
 import type { Health } from '~~/server/contexts/health/domain/Health'
 import type { HealthProvider } from '~~/server/contexts/health/domain/HealthProvider'
 
-import type { Config } from '~~/server/contexts/shared/domain/Config'
+import type { Config } from '~~/server/contexts/shared/config/domain/Config'
 
 interface Dependencies {
   config: Config

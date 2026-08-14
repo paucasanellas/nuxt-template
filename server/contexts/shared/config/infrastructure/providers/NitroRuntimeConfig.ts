@@ -1,4 +1,4 @@
-import type { Config } from '~~/server/contexts/shared/domain/Config'
+import type { Config } from '~~/server/contexts/shared/config/domain/Config'
 
 export class NitroRuntimeConfig implements Config {
   private readonly runtimeConfig = useRuntimeConfig()
