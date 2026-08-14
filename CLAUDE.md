@@ -67,8 +67,16 @@ The hooks are installed by the `prepare` script, which coexists with the existin
 ## Architecture
 
 Nuxt 4 with `srcDir` defaulting to `app/`. `server/` holds Nitro routes with a hexagonal layout and
-an awilix container (see `server/contexts/health` for the pattern: domain, application, ui, wired in
-`server/di/`); it is unrelated to page content and stays as is.
+an awilix container (see `server/contexts/health` for the pattern: `domain/` holds the model and
+its ports — `Health`, `HealthProvider` — `application/<use-case>/` holds one folder per use case —
+`application/check/HealthChecker.ts`, depending on the port, never on an implementation — and
+`infrastructure/` holds the adapters: `infrastructure/http/` for controllers,
+`infrastructure/providers/` for port implementations named after their technology
+(`NitroHealthProvider`), all wired in `server/di/`); it is unrelated to page content and stays
+as is. `server/contexts/shared/` groups cross-context modules, one folder per module with the same
+split inside: `shared/config/domain/Config.ts` is the port, and
+`shared/config/infrastructure/providers/NitroRuntimeConfig.ts` — the adapter over Nuxt's
+`useRuntimeConfig()` — is registered as `config` in the container.
 
 **Nuxt UI 4 + Tailwind 4.** `app/assets/css/main.css` is the Tailwind entrypoint and contains only `@import`s: `tailwindcss`, `@nuxt/ui`, then `./theme.css`, `./utilities.css` and `./animations.css`. Tailwind has no JS config file — all theming lives in CSS plus `app/app.config.ts` for Nuxt UI's own tokens (`primary` is `fuchsia`, `neutral` is `slate`). Colour mode preference is `system`, with `UColorModeButton` in the header.
 

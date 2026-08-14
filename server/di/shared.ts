@@ -1,9 +1,7 @@
 import { asClass } from 'awilix'
 
-import { Clock } from '~~/server/contexts/shared/clock/Clock'
-import { Config } from '~~/server/contexts/shared/config/Config'
+import { NitroRuntimeConfig } from '~~/server/contexts/shared/config/infrastructure/providers/NitroRuntimeConfig'
 
 export const shared = {
-  clock: asClass(Clock).singleton(),
-  config: asClass(Config).singleton(),
+  config: asClass(NitroRuntimeConfig).singleton(),
 }
