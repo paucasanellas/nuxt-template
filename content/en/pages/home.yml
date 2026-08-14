@@ -19,7 +19,7 @@ stack:
     - title: Nuxt 4
       description: srcDir is app/. Components auto-import without a path prefix, so a filename is the component name and has to be unique.
     - title: Nuxt UI 4
-      description: Every U* component, themed from a single app.config.ts. The views compose them directly.
+      description: Every U* component, themed from a single app/config/ui.ts. The views compose them directly.
     - title: Tailwind 4
       description: No JS config file. Theme tokens are declared in an @theme block inside main.css.
     - title: Nuxt Content 3
