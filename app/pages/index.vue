@@ -32,7 +32,7 @@ const { fetch: fetchPage } = usePage()
 
 const { data: page } = await useAsyncData(
   () => `page-home-${locale.value}`,
-  () => fetchPage('home', locale.value),
+  () => fetchPage(`home_${locale.value}`),
   { watch: [locale] },
 )
 
