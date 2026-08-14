@@ -18,7 +18,9 @@ const { public: { repositoryUrl } } = useRuntimeConfig()
 
 const items = computed<NavigationMenuItem[]>(() => [
   { label: t('nav.stack'), to: '#stack' },
-  { label: t('nav.conventions'), to: '#conventions' },
+  { label: t('nav.content'), to: '#content' },
+  { label: t('nav.backend'), to: '#backend' },
+  { label: t('nav.i18n'), to: '#i18n' },
   { label: t('nav.start'), to: '#start' },
   ...orientation === 'vertical'
     ? [{

@@ -6,7 +6,7 @@ export const Button = z.object({
   trailingIcon: z.string().optional(),
   to: z.string().optional(),
   target: z.enum(['_blank', '_self']).optional(),
-  color: z.enum(['primary', 'neutral', 'success', 'warning', 'error', 'info']).optional(),
+  color: z.enum(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info']).optional(),
   variant: z.enum(['solid', 'outline', 'subtle', 'soft', 'ghost', 'link']).optional(),
 })
 
@@ -19,6 +19,7 @@ export const PageFeature = z.object({
 export const PageHero = z.object({
   headline: z.string().optional(),
   title: z.string(),
+  highlight: z.string().optional(),
   description: z.string(),
   links: z.array(Button).optional(),
 })

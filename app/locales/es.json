@@ -1,11 +1,13 @@
 {
   "app": {
     "name": "nuxt-template",
-    "tagline": "Una plantilla de Nuxt 4 con las decisiones ya tomadas"
+    "tagline": "Una plantilla de Nuxt 4 pensada para aplicaciones que escalan"
   },
   "nav": {
     "stack": "Stack",
-    "conventions": "Convenciones",
+    "content": "Contenido",
+    "backend": "Backend",
+    "i18n": "Idiomas",
     "start": "Empezar",
     "repository": "Repositorio"
   },

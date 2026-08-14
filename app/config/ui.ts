@@ -3,7 +3,13 @@ const eyebrow = 'flex items-center gap-2 font-mono text-xs leading-none tracking
 export const ui = {
   colors: {
     primary: 'fuchsia',
+    secondary: 'lime',
     neutral: 'slate',
+  },
+  pageFeature: {
+    slots: {
+      leadingIcon: 'text-secondary',
+    },
   },
   pageHero: {
     slots: {

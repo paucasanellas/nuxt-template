@@ -1,53 +1,103 @@
-title: A Nuxt 4 starter with the decisions already made
-description: Clone it, rename it, ship. Typed content, two languages, state, a DI container and quality gates, already wired together.
+title: A Nuxt 4 template built for applications that scale
+description: Typed content, two languages, a hexagonal backend for frontend and quality gates — wired from the first commit.
 
 hero:
-  headline: nuxt-template/
-  title: A starter that already knows where everything goes.
-  description: Clone it, rename it, ship. Typed content, two languages, state, a DI container and the gates that keep the repo honest are already wired together.
+  title: A Nuxt template built for applications that scale.
+  highlight: scale
+  description: Start with the structure a large app ends up needing — typed content, two languages, a backend with its logic behind ports, and the gates that keep a growing repo honest. Wired from the first commit.
   links:
     - label: Use this template
       to: https://github.com/paucasanellas/nuxt-template/generate
       trailingIcon: i-lucide-arrow-up-right
       target: _blank
+    - label: See what comes wired
+      to: '#stack'
+      color: secondary
+      variant: ghost
+      trailingIcon: i-lucide-arrow-down
 
 stack:
   headline: package.json
-  title: What comes wired
-  description: The decisions are already made, so your first commit on a new project can be a feature instead of a setup.
+  title: Everything a growing app needs, already wired
+  description: Nine decisions made and connected to each other, so the first commit on a new project is a feature, not a setup.
   features:
     - title: Nuxt 4
+      icon: i-lucide-mountain
       description: srcDir is app/. Components auto-import without a path prefix, so a filename is the component name and has to be unique.
     - title: Nuxt UI 4
+      icon: i-lucide-panels-top-left
       description: Every U* component, themed from a single app/config/ui.ts. The views compose them directly.
     - title: Tailwind 4
-      description: No JS config file. Theme tokens are declared in an @theme block inside main.css.
+      icon: i-lucide-palette
+      description: No JS config file. Theme tokens live in an @theme block, and styling sticks to stock Tailwind classes.
     - title: Nuxt Content 3
-      description: Pages are YAML data validated by the zod schemas in content.config.ts and typed end to end.
+      icon: i-lucide-file-text
+      description: Pages are YAML data validated by zod schemas and typed end to end. It has its own section below.
     - title: Nuxt i18n 10
+      icon: i-lucide-languages
       description: English at /, Spanish at /es. Interface strings live in app/locales, page copy in content/.
     - title: Pinia
+      icon: i-lucide-store
       description: Setup stores in app/stores, with state grouped into one reactive object.
     - title: awilix
+      icon: i-lucide-container
       description: A strict DI container for server routes, built once and resolved per request.
     - title: ESLint stylistic
+      icon: i-lucide-align-left
       description: Formatting is a lint error, not a second tool. There is no Prettier config to keep in sync.
     - title: Husky and commitlint
+      icon: i-lucide-shield-check
       description: pre-push runs lint then typecheck. commit-msg rejects a message that does not parse.
 
-conventions:
+content:
   headline: shared/schemas/
-  title: A page is a schema, a view and two YAML files
-  description: The zod schema is the single contract — it validates the YAML on every build and types every query. The view composes Nuxt UI sections; the YAML carries the copy in each language.
+  title: Pages are contracts, not markup
+  description: Adding page ten is the same job as adding page one — declare a schema, add a view, write one YAML per language. The words never live inside components.
   features:
-    - title: shared/schemas/pricing.ts
-      description: The contract. Element schemas — Button, PageHero, PageSection — composed into the page's schema, registered as a collection per locale in content.config.ts.
-    - title: app/pages/pricing.vue
-      description: The view. Binds the typed content to Nuxt UI sections and owns the anchors and the layout.
-    - title: content/en/pages/pricing.yml
-      description: The content. Data only — copy, links, features. Validated against the schema, never against a component.
-    - title: content/es/pages/pricing.yml
-      description: The same page in Spanish. Same file shape, same validation, other language.
+    - title: One contract per page
+      icon: i-lucide-file-code
+      description: Element schemas — Button, PageHero, PageSection — compose into each page's zod schema, registered as a collection per locale in content.config.ts.
+    - title: Validated on every build
+      icon: i-lucide-badge-check
+      description: The YAML is parsed against the schema before it ships. A missing required field fails the build, so copy cannot drift from what the view expects.
+    - title: Typed end to end
+      icon: i-lucide-braces
+      description: queryCollection infers its result from the schema, so the view autocompletes the content it binds — no casts, no guessing at shapes.
+    - title: Copy out of the components
+      icon: i-lucide-files
+      description: content/<locale>/pages holds data only — titles, links, features. Redesigning a view never touches the words, and translating never touches the code.
+
+backend:
+  headline: server/contexts/
+  title: A backend for frontend in the same repo
+  description: Nitro routes with a hexagonal layout — domain and use cases at the centre, technology at the edges. One repo, one type system, one deploy.
+  features:
+    - title: server/contexts/health/domain
+      description: The model and its ports. Use cases depend on interfaces — nothing in the business logic knows Nitro exists.
+    - title: server/di
+      description: An awilix container in strict mode, built once at startup. Routes resolve their controller from it; nothing news its own dependencies.
+    - title: infrastructure/providers/NitroHealthProvider.ts
+      description: Adapters are named after their technology and live at the edge. Swapping a provider — or replacing it with a test double — never touches a use case.
+    - title: server/routes/health
+      description: GET /health answers with GetHealthResponse, a type from shared/ that the server and the app import alike. The contract cannot fork, because there is only one.
+
+i18n:
+  headline: content/es/
+  title: More than one language from day one
+  description: English at /, Spanish at /es. Adding a language means adding files — every layer already knows locales exist.
+  features:
+    - title: Routes per locale
+      icon: i-lucide-signpost
+      description: prefix_except_default keeps English at / and Spanish at /es. The language switcher is already wired with useSwitchLocalePath.
+    - title: The same contract per language
+      icon: i-lucide-copy
+      description: content/en and content/es hold the same pages, validated by the same schema. A translation cannot silently miss a field.
+    - title: Interface strings apart
+      icon: i-lucide-tags
+      description: Nav, footer and aria-labels live in app/locales; page copy lives in content/. A heading and a button label never share a file.
+    - title: URLs decide, not the browser
+      icon: i-lucide-link
+      description: detectBrowserLanguage is off on purpose. The URL is the single source of the locale, which keeps routes shareable and indexable.
 
 start:
   headline: README.md
@@ -55,15 +105,18 @@ start:
   description: The dev server listens on 8000, not 3000 — .env sets the port and Nitro picks it up.
   features:
     - title: pnpm install
+      icon: i-lucide-download
       description: Installs dependencies, runs nuxt prepare and installs the git hooks.
     - title: pnpm dev
+      icon: i-lucide-play
       description: Serves the app on localhost:8000 with devtools enabled.
     - title: pnpm lint && pnpm typecheck
+      icon: i-lucide-check-check
       description: The two gates that pre-push and CI both run. Green here means green there.
 
 cta:
-  title: Start from a repo that has already made these decisions
-  description: Rename it in package.json, replace the YAML in content/, and the home page is yours.
+  title: Scale is a starting point, not a refactor
+  description: Clone it, rename it in package.json, replace the YAML in content/ — the structure for the app you are going to grow is already here.
   links:
     - label: Use this template
       to: https://github.com/paucasanellas/nuxt-template/generate
@@ -71,7 +124,7 @@ cta:
       target: _blank
     - label: Read the conventions
       to: https://github.com/paucasanellas/nuxt-template/blob/main/CLAUDE.md
-      color: neutral
+      color: secondary
       variant: ghost
       trailingIcon: i-lucide-arrow-up-right
       target: _blank

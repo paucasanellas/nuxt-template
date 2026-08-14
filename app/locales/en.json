@@ -1,11 +1,13 @@
 {
   "app": {
     "name": "nuxt-template",
-    "tagline": "A Nuxt 4 starter with the decisions already made"
+    "tagline": "A Nuxt 4 template built for applications that scale"
   },
   "nav": {
     "stack": "Stack",
-    "conventions": "Conventions",
+    "content": "Content",
+    "backend": "Backend",
+    "i18n": "Languages",
     "start": "Get started",
     "repository": "Repository"
   },
