@@ -126,9 +126,11 @@ registered in the `css` array of `nuxt.config.ts`.
 use for their own site (`nuxt/ui` → `docs/content.config.ts`): element schemas composed into page
 schemas, one collection per page.
 
-- **schema** — `content.config.ts` defines the element schemas (`Button`, `PageFeature`, `PageHero`,
-  `PageSection`, `Page`) and one collection per page and locale: `home_en`, `home_es`. A new page
-  extends `Page` with its named sections and declares its two collections.
+- **schema** — `shared/schemas/page.ts` holds the element schemas (`Button`, `PageFeature`,
+  `PageHero`, `PageSection`, `Page`); each page composes them in its own file
+  (`shared/schemas/home.ts`). `content.config.ts` only declares collections — one per page and
+  locale (`home_en`, `home_es`), importing the page's schema. `shared/schemas/` is deliberately
+  outside `shared/utils/` and `shared/types/`, so nothing in it is auto-imported into the app.
 - **content** — `content/<locale>/pages/<page>.yml`. Data only: copy, links, features. It is
   validated against the schema on every build; a field the schema doesn't declare is dropped, a
   missing required field fails the parse.

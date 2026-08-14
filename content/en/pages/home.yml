@@ -36,12 +36,12 @@ stack:
       description: pre-push runs lint then typecheck. commit-msg rejects a message that does not parse.
 
 conventions:
-  headline: content.config.ts
+  headline: shared/schemas/
   title: A page is a schema, a view and two YAML files
   description: The zod schema is the single contract — it validates the YAML on every build and types every query. The view composes Nuxt UI sections; the YAML carries the copy in each language.
   features:
-    - title: content.config.ts
-      description: The contract. Element schemas — Button, PageHero, PageSection — composed into one typed collection per page and locale.
+    - title: shared/schemas/pricing.ts
+      description: The contract. Element schemas — Button, PageHero, PageSection — composed into the page's schema, registered as a collection per locale in content.config.ts.
     - title: app/pages/pricing.vue
       description: The view. Binds the typed content to Nuxt UI sections and owns the anchors and the layout.
     - title: content/en/pages/pricing.yml
