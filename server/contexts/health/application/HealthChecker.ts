@@ -1,4 +1,4 @@
-import type { HealthReport } from '~~/server/contexts/health/domain/Health'
+import type { Health } from '~~/server/contexts/health/domain/Health'
 
 import type { Config } from '~~/server/contexts/shared/config/Config'
 
@@ -13,10 +13,10 @@ export class HealthChecker {
     this.config = config
   }
 
-  check(): HealthReport {
+  check(): Health {
     return {
       status: 'ok',
-      version: this.config.version(),
+      version: this.config.version,
     }
   }
 }

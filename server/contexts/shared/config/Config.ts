@@ -1,7 +1,5 @@
 export class Config {
   private readonly runtimeConfig = useRuntimeConfig()
 
-  version() {
-    return this.runtimeConfig.public.version
-  }
+  public readonly version = this.runtimeConfig.public.version
 }

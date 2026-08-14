@@ -13,7 +13,7 @@ export class HealthHttpGetController {
     this.healthChecker = healthChecker
   }
 
-  run(event: ServerEvent): HealthResponse {
+  run(event: ServerEvent): GetHealthResponse {
     setResponseHeader(event, 'cache-control', 'no-store')
 
     return this.healthChecker.check()
