@@ -69,23 +69,5 @@ export default defineAppConfig({
         },
       },
     },
-    prose: {
-      cardGroup: {
-        base: 'grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 my-0 *:my-0',
-      },
-      steps: {
-        base: '[&_h3]:font-mono [&_h3]:text-base [&_h3]:mt-6 [&_h3]:first:mt-0',
-      },
-      fieldGroup: {
-        base: 'my-0 divide-y divide-default border-y border-default *:not-last:pb-6 *:not-first:pt-6',
-      },
-      field: {
-        slots: {
-          name: 'font-medium text-highlighted',
-          type: 'rounded-none bg-transparent px-0 font-mono type-eyebrow text-dimmed',
-          description: 'mt-2 text-[15px]/relaxed text-muted',
-        },
-      },
-    },
   },
 })

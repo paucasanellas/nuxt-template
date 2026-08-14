@@ -1,25 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs'
-
 import { version } from './package.json'
-
-function declaredPath(file: string) {
-  const frontmatter = readFileSync(file, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)
-
-  return frontmatter?.[1]?.match(/^path:\s*(\S+)\s*$/m)?.[1]
-}
-
-function pageRoutes(locale: string, prefix: string) {
-  const directory = `content/${locale}/pages`
-
-  return readdirSync(directory, { recursive: true })
-    .filter((file): file is string => typeof file === 'string' && file.endsWith('.md'))
-    .map((file) => {
-      const path = declaredPath(`${directory}/${file}`)
-        ?? `/${file.replace(/\.md$/, '').replace(/(^|\/)index$/, '')}`
-
-      return `${prefix}${path}`.replace(/\/+$/, '') || '/'
-    })
-}
 
 export default defineNuxtConfig({
   modules: [
@@ -53,13 +32,6 @@ export default defineNuxtConfig({
       sqliteConnector: 'native',
     },
   },
-  mdc: {
-    components: {
-      map: {
-        'u-page-cta': 'UPageCTA',
-      },
-    },
-  },
   runtimeConfig: {
     public: {
       version,
@@ -70,13 +42,6 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: 'latest',
-  nitro: {
-    prerender: {
-      crawlLinks: true,
-      routes: [...pageRoutes('en', ''), ...pageRoutes('es', '/es')],
-      failOnError: true,
-    },
-  },
   telemetry: false,
   i18n: {
     defaultLocale: 'en',
