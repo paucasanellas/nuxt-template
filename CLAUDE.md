@@ -137,19 +137,21 @@ schemas, one collection per page.
   the native `features` prop). Anchor ids live in the view, matching `AppHeaderNav`, not in content.
 
 Collections are named **literally** (`home_en`, not a computed key) because `queryCollection()`
-needs a literal to type its result. `usePage()` in `app/composables/page.ts` is the single place
+needs a literal to type its result. `fetchPage()` in `app/composables/page.ts` is the single place
 that assembles `` `${name}_${locale}` `` and casts it to `keyof Collections`; everything downstream
 is typed by zod inference. Collections use `type: 'page'`, so top-level `title` and `description`
 exist by default and feed `useSeoMeta`.
 
-**`usePage()` carries three conventions worth keeping:**
+**The composable only fetches; the view owns the orchestration.** `fetchPage()` is data access and
+the type cast, nothing else. Each view repeats its own `useAsyncData`, 404 and `useSeoMeta` — that
+repetition is deliberate: what a page does on load stays readable in the page itself, at the cost of
+a few duplicated lines per view. Three conventions the view-side code keeps:
 
 1. The `useAsyncData` key is a function and includes the locale (plus `watch: [locale]`), so
    switching language refetches instead of serving the first locale from cache.
 2. No document means `createError({ statusCode: 404, fatal: true })`.
-3. `useSeoMeta` runs inside `nuxtApp.runWithContext(...)`: after the composable's `await`, the Nuxt
-   instance is gone on SSR and a bare `useSeoMeta` throws. Any composable that touches Nuxt context
-   after an `await` needs the same treatment.
+3. The template guards with `v-if="page"` because `data` is nullable — the throw above doesn't
+   narrow a ref for the template's type check.
 
 **Interface strings vs page copy.** Nav, footer and aria-labels live in `app/locales/<locale>.json`;
 page copy lives in `content/`. Don't mix them: a heading belongs to Content, a button's aria-label

@@ -1,5 +1,5 @@
 <template>
-  <UPage>
+  <UPage v-if="page">
     <UPageHero v-bind="page.hero" />
 
     <UPageSection
@@ -27,5 +27,20 @@
 </template>
 
 <script setup lang="ts">
-const page = await usePage('home')
+const { locale } = useI18n()
+
+const { data: page } = await useAsyncData(
+  () => `page-home-${locale.value}`,
+  () => fetchPage('home', locale.value),
+  { watch: [locale] },
+)
+
+if (!page.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+}
+
+useSeoMeta({
+  title: () => page.value?.title,
+  description: () => page.value?.description,
+})
 </script>

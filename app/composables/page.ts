@@ -4,30 +4,10 @@ type StripLocale<CollectionName> = CollectionName extends `${infer Name}_en` ? N
 
 type PageName = StripLocale<keyof Collections>
 
-function pageCollection(name: PageName, locale: string) {
-  return `${name}_${locale}` as keyof Collections
-}
+type PageOf<Name extends PageName> = Collections[`${Name}_en` & keyof Collections]
 
-export async function usePage<Name extends PageName>(name: Name) {
-  const nuxtApp = useNuxtApp()
-  const { locale } = useI18n()
+export function fetchPage<Name extends PageName>(name: Name, locale: string) {
+  const collection = `${name}_${locale}` as keyof Collections
 
-  const { data } = await useAsyncData(
-    () => `page-${name}-${locale.value}`,
-    () => queryCollection(pageCollection(name, locale.value)).first(),
-    { watch: [locale] },
-  )
-
-  if (!data.value) {
-    throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
-  }
-
-  const page = data as Ref<Collections[`${Name}_en` & keyof Collections]>
-
-  nuxtApp.runWithContext(() => useSeoMeta({
-    title: () => page.value.title,
-    description: () => page.value.description,
-  }))
-
-  return page
+  return queryCollection(collection).first() as Promise<PageOf<Name> | null>
 }
