@@ -28,6 +28,7 @@
 
 <script setup lang="ts">
 const { locale } = useI18n()
+const { fetch: fetchPage } = usePage()
 
 const { data: page } = await useAsyncData(
   () => `page-home-${locale.value}`,

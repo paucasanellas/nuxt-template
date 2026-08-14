@@ -137,13 +137,13 @@ schemas, one collection per page.
   the native `features` prop). Anchor ids live in the view, matching `AppHeaderNav`, not in content.
 
 Collections are named **literally** (`home_en`, not a computed key) because `queryCollection()`
-needs a literal to type its result. `fetchPage()` in `app/composables/page.ts` is the single place
-that assembles `` `${name}_${locale}` `` and casts it to `keyof Collections`; everything downstream
-is typed by zod inference. Collections use `type: 'page'`, so top-level `title` and `description`
-exist by default and feed `useSeoMeta`.
+needs a literal to type its result. `usePage()` in `app/composables/page.ts` exposes a single
+`fetch(name, locale)`, which is the one place that assembles `` `${name}_${locale}` `` and casts it
+to `keyof Collections`; everything downstream is typed by zod inference. Collections use
+`type: 'page'`, so top-level `title` and `description` exist by default and feed `useSeoMeta`.
 
-**The composable only fetches; the view owns the orchestration.** `fetchPage()` is data access and
-the type cast, nothing else. Each view repeats its own `useAsyncData`, 404 and `useSeoMeta` — that
+**The composable only fetches; the view owns the orchestration.** `usePage().fetch` is data access
+and the type cast, nothing else. Each view repeats its own `useAsyncData`, 404 and `useSeoMeta` — that
 repetition is deliberate: what a page does on load stays readable in the page itself, at the cost of
 a few duplicated lines per view. Three conventions the view-side code keeps:
 

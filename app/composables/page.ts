@@ -6,8 +6,14 @@ type PageName = StripLocale<keyof Collections>
 
 type PageOf<Name extends PageName> = Collections[`${Name}_en` & keyof Collections]
 
-export function fetchPage<Name extends PageName>(name: Name, locale: string) {
-  const collection = `${name}_${locale}` as keyof Collections
+export const usePage = () => {
+  async function fetch<Name extends PageName>(name: Name, locale: string) {
+    const collection = `${name}_${locale}` as keyof Collections
 
-  return queryCollection(collection).first() as Promise<PageOf<Name> | null>
+    return await queryCollection(collection).first() as PageOf<Name> | null
+  }
+
+  return {
+    fetch,
+  }
 }
