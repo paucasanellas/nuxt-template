@@ -1,0 +1,77 @@
+title: A Nuxt 4 starter with the decisions already made
+description: Clone it, rename it, ship. Typed content, two languages, state, a DI container and quality gates, already wired together.
+
+hero:
+  headline: nuxt-template/
+  title: A starter that already knows where everything goes.
+  description: Clone it, rename it, ship. Typed content, two languages, state, a DI container and the gates that keep the repo honest are already wired together.
+  links:
+    - label: Use this template
+      to: https://github.com/pcasanellas-dogfy/nuxt-template/generate
+      trailingIcon: i-lucide-arrow-up-right
+      target: _blank
+
+stack:
+  headline: package.json
+  title: What comes wired
+  description: The decisions are already made, so your first commit on a new project can be a feature instead of a setup.
+  features:
+    - title: Nuxt 4
+      description: srcDir is app/. Components auto-import without a path prefix, so a filename is the component name and has to be unique.
+    - title: Nuxt UI 4
+      description: Every U* component, themed from a single app.config.ts. The views compose them directly.
+    - title: Tailwind 4
+      description: No JS config file. Theme tokens are declared in an @theme block inside main.css.
+    - title: Nuxt Content 3
+      description: Pages are YAML data validated by the zod schemas in content.config.ts and typed end to end.
+    - title: Nuxt i18n 10
+      description: English at /, Spanish at /es. Interface strings live in app/locales, page copy in content/.
+    - title: Pinia
+      description: Setup stores in app/stores, with state grouped into one reactive object.
+    - title: awilix
+      description: A strict DI container for server routes, built once and resolved per request.
+    - title: ESLint stylistic
+      description: Formatting is a lint error, not a second tool. There is no Prettier config to keep in sync.
+    - title: Husky and commitlint
+      description: pre-push runs lint then typecheck. commit-msg rejects a message that does not parse.
+
+conventions:
+  headline: content.config.ts
+  title: A page is a schema, a view and two YAML files
+  description: The zod schema is the single contract — it validates the YAML on every build and types every query. The view composes Nuxt UI sections; the YAML carries the copy in each language.
+  features:
+    - title: content.config.ts
+      description: The contract. Element schemas — Button, PageHero, PageSection — composed into one typed collection per page and locale.
+    - title: app/pages/pricing.vue
+      description: The view. Binds the typed content to Nuxt UI sections and owns the anchors and the layout.
+    - title: content/en/pages/pricing.yml
+      description: The content. Data only — copy, links, features. Validated against the schema, never against a component.
+    - title: content/es/pages/pricing.yml
+      description: The same page in Spanish. Same file shape, same validation, other language.
+
+start:
+  headline: README.md
+  title: Three commands to a running app
+  description: The dev server listens on 8000, not 3000 — .env sets the port and Nitro picks it up.
+  features:
+    - title: pnpm install
+      description: Installs dependencies, runs nuxt prepare and installs the git hooks.
+    - title: pnpm dev
+      description: Serves the app on localhost:8000 with devtools enabled.
+    - title: pnpm lint && pnpm typecheck
+      description: The two gates that pre-push and CI both run. Green here means green there.
+
+cta:
+  title: Start from a repo that has already made these decisions
+  description: Rename it in package.json, replace the YAML in content/, and the home page is yours.
+  links:
+    - label: Use this template
+      to: https://github.com/pcasanellas-dogfy/nuxt-template/generate
+      trailingIcon: i-lucide-arrow-up-right
+      target: _blank
+    - label: Read the conventions
+      to: https://github.com/pcasanellas-dogfy/nuxt-template/blob/main/CLAUDE.md
+      color: neutral
+      variant: ghost
+      trailingIcon: i-lucide-arrow-up-right
+      target: _blank
