@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 📥 Check out the repository
+        uses: actions/checkout@v7
+
+      - name: 📦 Set up pnpm and Node, then install dependencies
+        uses: pnpm/setup@v2
+        with:
+          cache: true
+
+      - name: 🔐 Audit dependencies
+        continue-on-error: true
+        run: pnpm audit --audit-level low --ignore-registry-errors
+
+      - name: 🧹 Lint
+        run: pnpm lint
+
+      - name: ✅ Typecheck
+        run: pnpm typecheck
+
+      - name: 🏗️ Build
+        run: pnpm build

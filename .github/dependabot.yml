@@ -1,0 +1,85 @@
+# yaml-language-server: $schema=https://json.schemastore.org/dependabot-2.0.json
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    versioning-strategy: increase
+    open-pull-requests-limit: 5
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Madrid
+    commit-message:
+      prefix: build(deps)
+      prefix-development: build(deps-dev)
+    groups:
+      nuxt-minor-patch:
+        patterns:
+          - nuxt
+          - "@nuxt/*"
+          - "@nuxtjs/*"
+        exclude-patterns:
+          - "@nuxt/eslint-config"
+        update-types:
+          - minor
+          - patch
+      vue-minor-patch:
+        patterns:
+          - vue
+          - vue-router
+          - vue-tsc
+        update-types:
+          - minor
+          - patch
+      linting-minor-patch:
+        patterns:
+          - eslint
+          - eslint-plugin-tailwindcss
+          - "@nuxt/eslint-config"
+        update-types:
+          - minor
+          - patch
+      commit-tooling-minor-patch:
+        patterns:
+          - "@commitlint/*"
+          - husky
+        update-types:
+          - minor
+          - patch
+      development-minor-patch:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      production-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+    cooldown:
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+
+  - package-ecosystem: github-actions
+    directory: /
+    open-pull-requests-limit: 3
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Madrid
+    commit-message:
+      prefix: ci(deps)
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7
